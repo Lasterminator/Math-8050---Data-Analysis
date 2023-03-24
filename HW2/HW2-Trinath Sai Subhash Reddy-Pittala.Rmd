@@ -1,0 +1,210 @@
+---
+title: "HW2-Trinath Sai Subhash Reddy-Pittala"
+author: "Subhash"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    keep_tex: yes
+  html_document:
+    code_folding: hide
+    word_wrap: true
+---
+
+```{r setup, include=FALSE}
+library(formatR)
+library(tidyverse)
+library(GGally)
+library(ggfortify)
+library(nycflights13)
+library(modelr)
+library(magick)
+library(haven)
+library(dplyr)
+library(ISLR)
+library(lubridate)
+library(ggplot2)
+library(nycflights13)
+library(knitr)
+
+knitr::opts_chunk$set(width = 60, warning = FALSE, message = FALSE, tidy.opts=list(width.cutoff=60),tidy=TRUE, echo = TRUE)
+#knitr::opts_chunk$set(echo = TRUE)
+
+```
+
+# Simple linear regression
+A. Write the regression equation in both forms (i.e., with and without error terms) as shown in class.
+
+$$
+arrivaldelay = \beta_{0} + \beta_{1} * depdelay + \epsilon
+$$
+$$
+\hat{arrivaldelay} = \hat{\beta_{0}} + \hat{\beta_{1}} * depdelay
+$$
+
+B. Load the flights dataset from the nycflights13 package using the library(“nycflights13”) function (you need to have already installed this package on your computer using the install.packages(“nycflights13”) command in R).
+
+```{r}
+# Load the nycflights13 library
+library(nycflights13)
+flights
+```
+
+C. Run a simple linear regression model using the lm() function and save the model as M1.
+
+```{r}
+M1 <- lm(arr_delay ~ dep_delay, data = flights)
+```
+
+D. Output the elements of M1 using the summary() function.
+
+```{r}
+summary(M1)
+```
+
+E. Explain the regression coefficients (intercept and slope estimates) in one sentence each. I want a “common sense” explanation, e.g., “The regression slope is AAA which denotes that the arrival delay changes by AAA hours for every 1 hour increase in departure delay” etc.
+
+The regression slope is 1.02 which denotes that the arrival delay increases by 1.02 hours for every 1 hour increase in departure delay. Also, since intercept is -5.89, if departure delay for a flight is 0 then the arrival delay is -5.89.
+
+F. Explain the Pr(> |t|) values for the two coefficients and how they capture the uncertainty in the regression coefficient estimates.
+
+Pr(> |t|) are p-values for probability of observing for T-statistic and deciding on Null hypothesis. Since for both slope and intercept the values are small (<2e-16) indicates that our estimates are significant hence eliminating null hypothesis and indicating stronger corelation between arrival and departure delays.
+
+G. Explain what the R2 numerical value indicates for this particular model in one sentence.
+
+R2 value is the amount of data which can fit the given distribution. Here 83.69% of data is fitting the distribution i.e, there is 83.69% of variability of Arrival delay is explained by the Departure delay.
+
+# Multiple linear regression
+
+A. Write out the regression equations in both forms for this multiple linear regression model.
+
+$$
+arrivaldelay = \beta_{0} + \beta_{1} * depdelay + \beta_{2} * schedarrtime + \beta_{3} * distance + \epsilon
+$$
+$$
+\hat{arrivaldelay} = \hat{\beta_{0}} + \hat{\beta_{1}} * depdelay + \hat{\beta_{2}} * schedarrtime + \hat{\beta_{3}} * distance
+$$
+
+B. Build the model in R using the lm() function and save this model as M2.
+
+```{r}
+M2 <- lm(arr_delay ~ dep_delay + sched_arr_time + distance, data = flights)
+summary(M2)
+```
+
+C. Explain the regression constant and the different regression coefficients in 1 precise sentence each. Note that each regression coefficient has to be explained also in terms of keeping all the other IVs constant. Also, explain how the regression coefficient for dep_delay changed between M1 and M2.
+
+Regression constant ($\beta_{0}$) is the intercept of the given linear regression equation i.e, value for which the other 3 IV's are zeroes. 
+
+$\beta_{1}$ is the regression coefficient for the Independent variable Departure Delay i.e, the differential of Departure delay vs arrival delay when other IV's are constant.
+
+$\beta_{2}$ is the regression coefficient for the Independent variable Scheduled Arrived Time  i.e, the differential of Scheduled Arrived Time vs arrival delay when other IV's are constant.
+
+$\beta_{3}$ is the regression coefficient for the Independent variable Distance i.e, the differential of Distance vs arrival delay when other IV's are constant.
+
+The $\beta_{1}$ is same in M1 and M2 because addition of Scheduled Arrived Time and Distance did not influence the relation between Arrival Delay and Departure delay in this particular case.
+
+D. Comment on the uncertainty in each of the regression coefficient estimates based on the Pr(> |t|) values in the R output.
+
+Pr(> |t|) are p-values for probability of observing for T-statistic and deciding on Null hypothesis. Since for both slope and intercept the values are small (<2e-16) indicates that our estimates are significant hence eliminating null hypothesis and indicating corelation between arrival and departure delays, Scheduled Arrived Time, Distance.
+
+E. Comment on the change in R2 value compared to M1.
+
+R2 value increased from 83.69 percent to 83.87 percent indicating that data is fitting the M2 better than M1.
+
+# Multiple linear regression with a qualitative variable
+
+A. Create a new variable called carrierAA using the mutate() function. This variable is TRUE if the carrier is AA, else it is FALSE.
+
+```{r}
+flights <- mutate(flights, carrierAA = ifelse(carrier == "AA", TRUE, FALSE))
+```
+
+B. Build a model M3 that predicts arr_delay based on this dichotomous variable carrierAA.
+
+```{r}
+M3 <- lm(arr_delay ~ carrierAA, data = flights)
+summary(M3)
+```
+
+C. Explain what the regression slope and the regression constant for this model mean by writing out the regression equation in the predictive form. Note that TRUE is evaluated as 1, and FALSE as 0 by R in a numerical context. Also, find the predicted arr_delay for flights that are AA, and flights that are not AA, based on the regression equation and the regression coefficients calculated from R.
+$$
+\hat{arrivaldelay} = \hat{\beta_{0}} + \hat{\beta_{1}} * carrierAA
+$$
+$\beta_{0}$ is regression Constant which describes the arrival delay when flight is not American Airlines
+and $\beta_{1}$ is Regression Coefficient for carrierAA which describes the differential of arrival delay when flight is American Airlines
+
+Arrival Delay estimate for CarrierAA is +7.60170-7.23741(1) = 0.36429
+
+Arrival Delay estimate for not CarrierAA is +7.60170-7.23741(0) = 7.60170
+
+D. Now, build a model M4 <- lm(arr_delay ~ carrier, data = flights). Run the summary(M4) and comment on what R has done in terms of the regression coefficients.
+
+```{r}
+M4 <- lm(arr_delay ~ carrier, data = flights)
+summary(M4)
+```
+
+R has made 15 dummy variables to represent 16 variables (all carriers). We can deduce the value of the 16th category from the values of the other 15 dummy variables. If all the 15 dummy variables are set to 0 (FALSE), then it implies that the leftover is 16th variable.
+
+E. Dummy variable coding: When a qualitative variable is included in a regression model, R creates a series of variables called dummy variables, each of which takes values TRUE or FALSE, similar to what we did with carrierAA. Notice that there are 16 unique values for the carrier variable in the dataset, and R creates 15 dummy variables for the regression. Explain how this set of 15 dummy variables allows for all 16 values in the original dataset to be represented. Hint: First find the one carrier value that is not represented in the dummy variable set. Then, notice the logic that when we want to represent the carrier YV, we could set carrierYV = 1 (TRUE), and all other dummy variables will have to be 0 (FALSE). Now, what happens when all the dummy variables are set to 0?
+
+In the dataset, there are 16 unique values for the carrier variable, but only 15 dummy variables are created for the regression. This is because we can deduce the value of the 16th category from the values of the other 15 dummy variables. If all the 15 dummy variables are set to 0 (FALSE), then it implies that the 16th category (which is not represented in the dummy variable set) is present.
+
+F. Write out a regression equation that corresponds to the output of the lm() function using the 15 dummy variables. Remember that these variables mathematically can only take values 0 or 1.
+
+$$
+arr\ delay = 7.3797 + (-7.0154)  * carrierAA + (-17.3106) * carrierAS + ... + (8.1773) * carrierYV
+$$
+
+G. Explain what the regression constant and the different regression coefficients mean in terms of predicted arr_delay in this model. Notice the regression constant corresponds to setting all variables in the regression equation to 0, and hence corresponds to a particular carrier (called the reference or the baseline value). This reference or baseline can be chosen by the user but R automatically chooses a carrier to be the baseline in this case. Similary a unit change in a dummy variable corresponds to changing that variable from 0 to 1, which means changing from the reference carrier to the carrier in question. 
+
+The predicted arr_delay for each carrier can be calculated using the regression equation:
+
+$$
+\hat{predicted\ arr\ delay} = \hat{\beta_{0}} + \hat{\beta_{1}} * carrierAA + \hat{\beta_{2}} * carrierAS + ... + \hat{\beta_{15}} * carrierYV
+$$
+
+Where:
+$\beta_{0}$ is the intercept (7.3797) and 16th carrier (9E) which is the reference carrier
+$\beta_{1}$ to $\beta_{15}$ are the coefficients for each of the 15 carriers (AA, AS, B6, DL, EV, F9, FL, HA, MQ, OO, UA, US, VX, WN, and YV) where each of them are either 0 or 1
+
+H. Tabulate the predicted delay for each carrier based on this model using the regression equation.
+
+```{r}
+# Create a data frame
+res <- summary(M4)$coefficients
+rownames(res)[1] = c("carrier9E")
+res[-1,1] = res[-1,1] + res[1,1]
+res[-1,2] = res[-1,2] + res[1,2]
+res = res[,1:2]
+colnames(res)[1] = c("Arrival_delay")
+colnames(res)[2] = c("Standard_Error")
+
+kable(res)
+```
+
+# Multiple regression with both quantitative and qualitative variables
+
+A. Build a model M5 in R that has all the variables in M2 as well as the carrier variable.
+
+```{r}
+M5 <- lm(arr_delay ~ dep_delay + sched_arr_time + distance + carrierAA, data = flights)
+summary(M5)
+```
+
+B. Explain the regression coefficients including the regression constant. In this case, the slopes due to the quantitative variables do not depend on the carrier. The effect of each carrier is to add a fixed predicted delay when all the quantitative variables are held constant.
+
+$$
+arrivaldelay = \beta_{0} + \beta_{1} * depdelay + \beta_{2} * schedarrtime + \beta_{3} * distance + \beta_{4} * carrier + \epsilon
+$$
+$$
+\hat{arrivaldelay} = \hat{\beta_{0}} + \hat{\beta_{1}} * depdelay + \hat{\beta_{2}} * schedarrtime + \hat{\beta_{3}} * distance + \hat{\beta_{4}} * carrier
+$$
+
+Regression coefficients ($\beta_{i}$) quantifies the amount of correlation (the differential) between the Arrival delay with Departure Delay, Scheduled Arrival Time, Distance, and Carrier. 
+
+Regression Constant ($\beta_{0}$) is the Baseline Arrival Delay given all the other quantitative variables are constant and equal to zero.
+
+C. Explain the R2 value for M5, and explain how this model compares to models M1, M2, and M4.
+
+R2 for M5 is 0.8389. Its highest of M1, M2 and M4 suggesting a better fit to a Linear regression model.
