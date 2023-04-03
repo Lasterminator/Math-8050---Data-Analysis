@@ -117,7 +117,7 @@ Comparing the two models M1 and M2, we can see that they have identical R-square
 
 d. For M1, explain what each regression coefficient indicates, and explain what the rate of change of the DV with respect to each IV is (when all other IVs are kept constant). Comment on the statistical significance of different variables, and the overall Rˆ2 value.
 
-The coefficient for dep_delay suggests that for every unit increase in dep_delay, arr_delay decreases by 3.490e+01 units. The coefficient for dep_delay2 indicates that for every unit increase in dep_delay squared, arr_delay increases by 1.055e+00 units. The coefficient for dep_delay3 suggests that for every unit increase in dep_delay cubed, arr_delay decreases by 2.081e-04 units.
+The coefficient for dep_delay suggests that for every unit increase in dep_delay, arr_delay increases by 1.055e+00 units. The coefficient for dep_delay2 indicates that for every unit increase in dep_delay squared, arr_delay decreases by 2.081e-04 units. The coefficient for dep_delay3 suggests that for every unit increase in dep_delay cubed, arr_delay increases by 1.459e-07 units.
 
 The coefficient for air_time indicates that for every unit increase in air_time, arr_delay increases by 9.789e-01 units. The coefficient for air_time2 suggests that for every unit increase in air_time squared, arr_delay decreases by 1.145e-03 units. The coefficient for air_time3 indicates that for every unit increase in air_time cubed, arr_delay increases by 1.293e-06 units.
 
