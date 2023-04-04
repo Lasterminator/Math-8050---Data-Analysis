@@ -130,7 +130,7 @@
 \title{Project}
 \author{Trinath Sai Subhash Reddy Pittala, Uma Maheswara R Meleti,
 Hemanth Vasireddy}
-\date{2023-03-24}
+\date{2023-04-04}
 
 \begin{document}
 \maketitle
@@ -161,7 +161,7 @@ Questions we can answer with the dataset: Price Forecasting: use
 pricing, room type, and amenities to predict potential rental prices in
 the future. Hotspots: use listing location in relation to business and
 tourism centers and correlate this with pricing to determine where
-Airbnb rentals would be most profitable Customer sentiment analysis:
+Airbnb rentals would be most profitable Customer Sentiment Analysis:
 analyze customer comments and satisfaction ratings to evaluate listing
 on overall customer experience and use it to optimize hosts' services to
 improve user satisfaction ratings.
@@ -254,88 +254,170 @@ Files}\label{combining-the-data-from-all-files}}
 ## 6       15.692376 4.87699 52.38966 amsterdam_weekdays
 \end{verbatim}
 
-\hypertarget{spilt-training-and-testing-data}{%
-\subsubsection{Spilt Training and Testing
-Data}\label{spilt-training-and-testing-data}}
-
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123456789}\NormalTok{)}
-\NormalTok{my\_data\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data[}\FunctionTok{sample}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(my\_data), }\FloatTok{0.7} \SpecialCharTok{*} \FunctionTok{nrow}\NormalTok{(my\_data)),}
-\NormalTok{    ]}
-\NormalTok{my\_data\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data[}\FunctionTok{setdiff}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(my\_data), }\FunctionTok{rownames}\NormalTok{(my\_data\_train)),}
-\NormalTok{    ]}
-\FunctionTok{head}\NormalTok{(my\_data\_train)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{unique}\NormalTok{(my\_data[my\_data}\SpecialCharTok{$}\NormalTok{room\_shared }\SpecialCharTok{==}\NormalTok{ my\_data}\SpecialCharTok{$}\NormalTok{room\_private,}
+\NormalTok{    ]}\SpecialCharTok{$}\NormalTok{room\_type))  }\CommentTok{\# if the room is shared }
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##          X  realSum       room_type room_shared room_private person_capacity
-## 44098  462 368.6905 Entire home/apt       False        False               4
-## 47120 3484 240.3385 Entire home/apt       False        False               4
-## 29708 2631 257.7671    Private room       False         True               2
-## 9772   856 485.9543 Entire home/apt       False        False               2
-## 16896  196 269.4653 Entire home/apt       False        False               4
-## 2325   244 220.2798 Entire home/apt       False        False               6
-##       host_is_superhost multi biz cleanliness_rating guest_satisfaction_overall
-## 44098             False     0   1                  8                         80
-## 47120             False     0   1                  8                        100
-## 29708             False     0   0                 10                        100
-## 9772              False     0   0                  9                         84
-## 16896             False     0   1                 10                         93
-## 2325              False     1   0                 10                         98
-##       bedrooms      dist metro_dist attr_index attr_index_norm rest_index
-## 44098        1 1.4966090  0.5553737 1758.54461       38.961335  2076.9803
-## 47120        1 2.7716179  0.5800582  574.88024       12.736727  1479.5874
-## 29708        1 6.5817328  2.0478099  172.41005       11.984895   385.5078
-## 9772         1 1.0793735  0.3433846  472.88903       18.258792  1141.3205
-## 16896        1 0.8901721  0.5452364  339.08856       11.194767   684.5563
-## 2325         3 2.0502381  0.5606083   74.35373        2.803444   107.7512
-##       rest_index_norm      lng      lat           city_day
-## 44098       45.252362 12.48423 41.90030      rome_weekends
-## 47120       32.236620 12.46991 41.90711      rome_weekends
-## 29708        6.899917 -0.18190 51.45989    london_weekends
-## 9772        25.070976  2.16725 41.37764 barcelona_weekends
-## 16896       30.615911 -9.12964 38.71413    lisbon_weekdays
-## 2325         8.090617 23.75717 37.98218    athens_weekdays
+## [1] "Entire home/apt"
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{head}\NormalTok{(my\_data\_test)}
+\FunctionTok{print}\NormalTok{(}\FunctionTok{unique}\NormalTok{(my\_data[my\_data}\SpecialCharTok{$}\NormalTok{room\_private }\SpecialCharTok{==} \StringTok{"False"}\NormalTok{, ]}\SpecialCharTok{$}\NormalTok{room\_type))}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##     X  realSum       room_type room_shared room_private person_capacity
-## 3   2 264.1014    Private room       False         True               2
-## 4   3 433.5294    Private room       False         True               4
-## 10  9 276.5215    Private room       False         True               2
-## 12 11 319.6401    Private room       False         True               2
-## 17 16 368.8515    Private room       False         True               2
-## 22 21 933.8458 Entire home/apt       False        False               4
-##    host_is_superhost multi biz cleanliness_rating guest_satisfaction_overall
-## 3              False     0   1                  9                         87
-## 4              False     0   1                  9                         90
-## 10             False     1   0                 10                         88
-## 12              True     1   0                 10                         97
-## 17             False     0   0                 10                         90
-## 22             False     0   0                 10                         96
-##    bedrooms     dist metro_dist attr_index attr_index_norm rest_index
-## 3         1 5.748312  3.6516213   75.27588        3.985908   95.38695
-## 4         2 0.384862  0.4398761  493.27253       26.119108  875.03310
-## 10        1 3.142361  0.9244044  206.25286       10.921226  238.29126
-## 12        1 2.182707  1.5903814  191.50134       10.140123  229.29740
-## 17        1 1.327797  0.1195281  539.01288       28.541090  573.89657
-## 22        2 1.014066  0.3771037  477.79407       25.299513  664.05325
-##    rest_index_norm     lng      lat           city_day
-## 3          6.64670 4.97512 52.36103 amsterdam_weekdays
-## 4         60.97357 4.89417 52.37663 amsterdam_weekdays
-## 10        16.60448 4.87600 52.34700 amsterdam_weekdays
-## 12        15.97777 4.92496 52.37107 amsterdam_weekdays
-## 17        39.98994 4.88971 52.36148 amsterdam_weekdays
-## 22        46.27219 4.89088 52.36422 amsterdam_weekdays
+## [1] "Entire home/apt" "Shared room"
 \end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{unique}\NormalTok{(my\_data[my\_data}\SpecialCharTok{$}\NormalTok{room\_shared }\SpecialCharTok{==} \StringTok{"True"}\NormalTok{, ]}\SpecialCharTok{$}\NormalTok{room\_type))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Shared room"
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{print}\NormalTok{(}\FunctionTok{unique}\NormalTok{(my\_data[my\_data}\SpecialCharTok{$}\NormalTok{room\_shared }\SpecialCharTok{==} \StringTok{"False"}\NormalTok{, ]}\SpecialCharTok{$}\NormalTok{room\_type))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] "Private room"    "Entire home/apt"
+\end{verbatim}
+
+The room\_shared and room\_private information is already embedded in
+room\_type. The variables are multi-collinear, so we can remove
+room\_shared and room\_private.
+
+\hypertarget{dropping-columns-of-room_shared-and-room_private}{%
+\subsubsection{Dropping columns of room\_shared and
+room\_private}\label{dropping-columns-of-room_shared-and-room_private}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_data }\OtherTok{=} \FunctionTok{select}\NormalTok{(my\_data, }\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(room\_shared, room\_private))}
+\FunctionTok{head}\NormalTok{(my\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   X  realSum    room_type person_capacity host_is_superhost multi biz
+## 1 0 194.0337 Private room               2             False     1   0
+## 2 1 344.2458 Private room               4             False     0   0
+## 3 2 264.1014 Private room               2             False     0   1
+## 4 3 433.5294 Private room               4             False     0   1
+## 5 4 485.5529 Private room               2              True     0   0
+## 6 5 552.8086 Private room               3             False     0   0
+##   cleanliness_rating guest_satisfaction_overall bedrooms      dist metro_dist
+## 1                 10                         93        1 5.0229638  2.5393800
+## 2                  8                         85        1 0.4883893  0.2394039
+## 3                  9                         87        1 5.7483119  3.6516213
+## 4                  9                         90        2 0.3848620  0.4398761
+## 5                 10                         98        1 0.5447382  0.3186926
+## 6                  8                        100        2 2.1314201  1.9046682
+##   attr_index attr_index_norm rest_index rest_index_norm     lng      lat
+## 1   78.69038        4.166708   98.25390        6.846473 4.90569 52.41772
+## 2  631.17638       33.421209  837.28076       58.342928 4.90005 52.37432
+## 3   75.27588        3.985908   95.38695        6.646700 4.97512 52.36103
+## 4  493.27253       26.119108  875.03310       60.973565 4.89417 52.37663
+## 5  552.83032       29.272733  815.30574       56.811677 4.90051 52.37508
+## 6  174.78896        9.255191  225.20166       15.692376 4.87699 52.38966
+##             city_day
+## 1 amsterdam_weekdays
+## 2 amsterdam_weekdays
+## 3 amsterdam_weekdays
+## 4 amsterdam_weekdays
+## 5 amsterdam_weekdays
+## 6 amsterdam_weekdays
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm),}
+    \AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-8-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm),}
+    \AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-8-2.png}
+
+attr\_index and attr\_index\_norm are same, attr\_index\_norm is just
+normalized attr\_index
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ rest\_index, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm),}
+    \AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-9-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ rest\_index, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm),}
+    \AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-9-2.png}
+
+rest\_index and rest\_index\_norm are same, rest\_index\_norm is just
+normalized rest\_index.
+
+removing attr\_index and rest\_index
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_data }\OtherTok{=} \FunctionTok{select}\NormalTok{(my\_data, }\SpecialCharTok{{-}}\FunctionTok{c}\NormalTok{(attr\_index, rest\_index))}
+\FunctionTok{head}\NormalTok{(my\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##   X  realSum    room_type person_capacity host_is_superhost multi biz
+## 1 0 194.0337 Private room               2             False     1   0
+## 2 1 344.2458 Private room               4             False     0   0
+## 3 2 264.1014 Private room               2             False     0   1
+## 4 3 433.5294 Private room               4             False     0   1
+## 5 4 485.5529 Private room               2              True     0   0
+## 6 5 552.8086 Private room               3             False     0   0
+##   cleanliness_rating guest_satisfaction_overall bedrooms      dist metro_dist
+## 1                 10                         93        1 5.0229638  2.5393800
+## 2                  8                         85        1 0.4883893  0.2394039
+## 3                  9                         87        1 5.7483119  3.6516213
+## 4                  9                         90        2 0.3848620  0.4398761
+## 5                 10                         98        1 0.5447382  0.3186926
+## 6                  8                        100        2 2.1314201  1.9046682
+##   attr_index_norm rest_index_norm     lng      lat           city_day
+## 1        4.166708        6.846473 4.90569 52.41772 amsterdam_weekdays
+## 2       33.421209       58.342928 4.90005 52.37432 amsterdam_weekdays
+## 3        3.985908        6.646700 4.97512 52.36103 amsterdam_weekdays
+## 4       26.119108       60.973565 4.89417 52.37663 amsterdam_weekdays
+## 5       29.272733       56.811677 4.90051 52.37508 amsterdam_weekdays
+## 6        9.255191       15.692376 4.87699 52.38966 amsterdam_weekdays
+\end{verbatim}
+
+\hypertarget{outliers-using-iqr-range}{%
+\subsection{Outliers using IQR Range}\label{outliers-using-iqr-range}}
 
 \hypertarget{filtering-out-the-outliers-from-data-out-of-iqr-ranges}{%
 \subsubsection{Filtering out the Outliers from Data Out of IQR
@@ -390,8 +472,57 @@ Ranges}\label{filtering-out-the-outliers-from-data-out-of-iqr-ranges}}
 \CommentTok{\# Removing the .csv ext}
 \NormalTok{my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\OtherTok{\textless{}{-}} \FunctionTok{gsub}\NormalTok{(}\StringTok{"}\SpecialCharTok{\textbackslash{}\textbackslash{}}\StringTok{.csv"}\NormalTok{, }\StringTok{""}\NormalTok{, my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day)}
 
-\CommentTok{\# summary(my\_data\_filtered)}
+\FunctionTok{summary}\NormalTok{(my\_data\_filtered)}
+\end{Highlighting}
+\end{Shaded}
 
+\begin{verbatim}
+##        X           realSum         room_type         room_shared       
+##  Min.   :   0   Min.   :  34.78   Length:48970       Length:48970      
+##  1st Qu.: 645   1st Qu.: 145.23   Class :character   Class :character  
+##  Median :1340   Median : 204.27   Mode  :character   Mode  :character  
+##  Mean   :1621   Mean   : 244.35                                        
+##  3rd Qu.:2385   3rd Qu.: 295.27                                        
+##  Max.   :5378   Max.   :1229.11                                        
+##  room_private       person_capacity host_is_superhost      multi       
+##  Length:48970       Min.   :2.00    Length:48970       Min.   :0.0000  
+##  Class :character   1st Qu.:2.00    Class :character   1st Qu.:0.0000  
+##  Mode  :character   Median :3.00    Mode  :character   Median :0.0000  
+##                     Mean   :3.08                       Mean   :0.2953  
+##                     3rd Qu.:4.00                       3rd Qu.:1.0000  
+##                     Max.   :6.00                       Max.   :1.0000  
+##       biz        cleanliness_rating guest_satisfaction_overall    bedrooms     
+##  Min.   :0.000   Min.   : 2.000     Min.   : 20.00             Min.   : 0.000  
+##  1st Qu.:0.000   1st Qu.: 9.000     1st Qu.: 90.00             1st Qu.: 1.000  
+##  Median :0.000   Median :10.000     Median : 95.00             Median : 1.000  
+##  Mean   :0.342   Mean   : 9.384     Mean   : 92.57             Mean   : 1.118  
+##  3rd Qu.:1.000   3rd Qu.:10.000     3rd Qu.: 98.00             3rd Qu.: 1.000  
+##  Max.   :1.000   Max.   :10.000     Max.   :100.00             Max.   :10.000  
+##       dist            metro_dist          attr_index      attr_index_norm   
+##  Min.   : 0.01506   Min.   : 0.002301   Min.   :  15.15   Min.   :  0.9263  
+##  1st Qu.: 1.48598   1st Qu.: 0.250718   1st Qu.: 133.75   1st Qu.:  6.2341  
+##  Median : 2.66962   Median : 0.416955   Median : 228.54   Median : 11.1929  
+##  Mean   : 3.24072   Mean   : 0.691774   Mean   : 285.15   Mean   : 13.0064  
+##  3rd Qu.: 4.31533   3rd Qu.: 0.749700   3rd Qu.: 374.37   3rd Qu.: 16.9444  
+##  Max.   :25.28456   Max.   :14.273577   Max.   :4513.56   Max.   :100.0000  
+##    rest_index      rest_index_norm         lng                lat       
+##  Min.   :  19.58   Min.   :  0.5928   Min.   :-9.22634   Min.   :37.95  
+##  1st Qu.: 245.42   1st Qu.:  8.5601   1st Qu.:-0.07277   1st Qu.:41.40  
+##  Median : 512.42   Median : 17.1799   Median : 4.87234   Median :47.51  
+##  Mean   : 611.32   Mean   : 22.2861   Mean   : 7.40027   Mean   :45.66  
+##  3rd Qu.: 818.44   3rd Qu.: 32.0321   3rd Qu.:13.52350   3rd Qu.:51.47  
+##  Max.   :6696.16   Max.   :100.0000   Max.   :23.78602   Max.   :52.64  
+##    city_day        
+##  Length:48970      
+##  Class :character  
+##  Mode  :character  
+##                    
+##                    
+## 
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \CommentTok{\# Combine all the outliers into a single dataset}
 \NormalTok{my\_outliers }\OtherTok{\textless{}{-}} \FunctionTok{bind\_rows}\NormalTok{(outliers\_list)}
 
@@ -447,310 +578,9 @@ Ranges}\label{filtering-out-the-outliers-from-data-out-of-iqr-ranges}}
 ## 
 \end{verbatim}
 
-\hypertarget{exploratory-data-analysis}{%
-\section{Exploratory Data Analysis}\label{exploratory-data-analysis}}
-
-\hypertarget{boxplot-of-price-vs-city}{%
-\subsubsection{Boxplot of Price Vs
-City}\label{boxplot-of-price-vs-city}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(city\_day, realSum, }\AttributeTok{FUN =}\NormalTok{ median),}
-    \AttributeTok{y =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.key.height =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\StringTok{"cm"}\NormalTok{), }\AttributeTok{legend.key.size =} \FunctionTok{unit}\NormalTok{(}\DecValTok{1}\NormalTok{,}
-        \StringTok{"lines"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-5-1.pdf}
-
-The highest prices in europe are found in amsterdam.
-
-\hypertarget{density-plot-of-price-vs-room-type}{%
-\subsubsection{Density plot of Price vs Room
-type}\label{density-plot-of-price-vs-room-type}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{group =}\NormalTok{ room\_type,}
-    \AttributeTok{fill =}\NormalTok{ room\_type, }\AttributeTok{alpha =} \FloatTok{0.2}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{geom\_density}\NormalTok{()}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-6-1.pdf}
-
-The prices of entire home are high comparitively
-
-\hypertarget{boxplot-of-city-vs-guest-satisfaction}{%
-\subsubsection{Boxplot of City vs Guest
-Satisfaction}\label{boxplot-of-city-vs-guest-satisfaction}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(city\_day, guest\_satisfaction\_overall,}
-    \AttributeTok{FUN =}\NormalTok{ median), }\AttributeTok{y =}\NormalTok{ guest\_satisfaction\_overall, }\AttributeTok{fill =}\NormalTok{ city\_day)) }\SpecialCharTok{+}
-    \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.key.height =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{,}
-    \StringTok{"cm"}\NormalTok{), }\AttributeTok{legend.key.size =} \FunctionTok{unit}\NormalTok{(}\DecValTok{1}\NormalTok{, }\StringTok{"lines"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-7-1.pdf}
-
-This plot shows there is no major difference in Guest Satisfaction vs
-City.
-
-\hypertarget{scatterplot-of-price-vs-guest-satisfaction-filtered-by-city}{%
-\subsubsection{Scatterplot of Price vs Guest Satisfaction filtered by
-city}\label{scatterplot-of-price-vs-guest-satisfaction-filtered-by-city}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ guest\_satisfaction\_overall,}
-    \AttributeTok{color =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{xlab}\NormalTok{(}\StringTok{"Price"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Guest Satisfaction Overall"}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{scale\_color\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"City{-}Day"}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-8-1.pdf}
-
-This plot implies there are good cheaper Airbnb at most cities which
-give higher guest satisfaction rating
-
-\hypertarget{scatterplot-of-prices-in-rome-w.r.t-latitude-and-longitude-during-weekdays}{%
-\subsubsection{Scatterplot of Prices in Rome w.r.t Latitude and
-Longitude during
-weekdays}\label{scatterplot-of-prices-in-rome-w.r.t-latitude-and-longitude-during-weekdays}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{tema }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{23}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
-    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{,}
-        \AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{),}
-    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{), }\AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{,}
-        \AttributeTok{size =} \DecValTok{19}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{legend.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#F5FFFA"}\NormalTok{,}
-        \AttributeTok{size =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}
-
-\NormalTok{rome\_data }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_filtered }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{subset}\NormalTok{(city\_day }\SpecialCharTok{==} \StringTok{"rome\_weekdays"}\NormalTok{)}
-
-\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ rome\_data, }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ lat, }\AttributeTok{y =}\NormalTok{ lng)) }\SpecialCharTok{+} \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
-    \FunctionTok{scale\_fill\_identity}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ realSum),}
-    \AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{""}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ tema}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-9-1.pdf}
-
-This plot is within expectations of game theory, which suggests similar
-types of establishments (price and hospitality) tend be in clusters.
-
-\hypertarget{outlier-analysis}{%
-\subsubsection{Outlier Analysis}\label{outlier-analysis}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ dist)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{), }\AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-10-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ cleanliness\_rating,}
-    \AttributeTok{group =}\NormalTok{ cleanliness\_rating)) }\SpecialCharTok{+} \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{), }\AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+}
-    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{cleanliness\_rating)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-11-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ room\_shared, }\AttributeTok{group =}\NormalTok{ room\_shared)) }\SpecialCharTok{+}
-    \FunctionTok{geom\_density}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
-    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-12-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ room\_private, }\AttributeTok{group =}\NormalTok{ room\_private)) }\SpecialCharTok{+}
-    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{bins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
-    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-13-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{(my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ multi, }\AttributeTok{group =}\NormalTok{ multi)) }\SpecialCharTok{+}
-    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{bins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
-    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-14-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ metro\_dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ metro\_dist,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-15-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ metro\_dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ metro\_dist,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-15-2.pdf}
-
-The pricey rooms are mostly near to the metro
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers,}
-    \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-16-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers,}
-    \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
-    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-16-2.pdf}
-
-The pricey rooms are mostly near to the centre of the city and the there
-is some correlation.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ attr\_index, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ attr\_index,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-17-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ attr\_index, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ attr\_index,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-17-2.pdf}
-
-The range of values falling b/w outliers and normal data is almost same
-. So there isn't a relationship b/w attr\_index and realSum.
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm,}
-    \AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-18-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm,}
-    \AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-18-2.pdf}
-
-attr\_index and attr\_index\_norm are same, attr\_index\_norm is just
-normalized attr\_index
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ rest\_index, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
-    \AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-19-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ rest\_index, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
-    \AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-19-2.pdf}
-
-rest\_index and rest\_index\_norm are same, rest\_index\_norm is just
-normalized rest\_index
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ rest\_index, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ rest\_index,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-20-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
-    \AttributeTok{y =}\NormalTok{ rest\_index, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
-    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ rest\_index,}
-        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
-    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-20-2.pdf}
-
-There is no relationship outliers and rest\_index
-
-\hypertarget{percentage-of-outliers.}{%
-\subsubsection{Percentage of Outliers.}\label{percentage-of-outliers.}}
+\hypertarget{percentage-of-outliers-outside-of-iqr-range.}{%
+\subsubsection{Percentage of Outliers outside of IQR
+range.}\label{percentage-of-outliers-outside-of-iqr-range.}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -808,12 +638,640 @@ vienna\_weekends & 1799 & 4.113396 \\
 \bottomrule()
 \end{longtable}
 
+\hypertarget{spilt-training-and-testing-data}{%
+\subsection{Spilt Training and Testing
+Data}\label{spilt-training-and-testing-data}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{set.seed}\NormalTok{(}\DecValTok{123456789}\NormalTok{)}
+\NormalTok{my\_data\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data[}\FunctionTok{sample}\NormalTok{(}\FunctionTok{nrow}\NormalTok{(my\_data), }\FloatTok{0.7} \SpecialCharTok{*} \FunctionTok{nrow}\NormalTok{(my\_data)),}
+\NormalTok{    ]}
+\NormalTok{my\_data\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data[}\FunctionTok{setdiff}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(my\_data), }\FunctionTok{rownames}\NormalTok{(my\_data\_train)),}
+\NormalTok{    ]}
+\FunctionTok{dim}\NormalTok{(my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 36194    17
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{dim}\NormalTok{(my\_data\_test)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 15513    17
+\end{verbatim}
+
+\hypertarget{exploratory-data-analysis}{%
+\section{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+
+\hypertarget{outlier-analysis}{%
+\subsection{Outlier Analysis}\label{outlier-analysis}}
+
+\hypertarget{metro-dist-vs-real-sum}{%
+\subsubsection{Metro Dist vs Real Sum}\label{metro-dist-vs-real-sum}}
+
+We have planned to analyse the filtered data along with outlier data.
+Here outlier data represents the hotel rooms with high prices.
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ metro\_dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ metro\_dist,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-14-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ metro\_dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ metro\_dist,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-14-2.png} In
+general the rooms that are closer to metro have comparatively higher
+prices. But, in Rome city the distance to metro is almost same for both
+categories of price.
+
+\hypertarget{real-sum-vs-distance}{%
+\subsubsection{Real Sum vs Distance}\label{real-sum-vs-distance}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers,}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-15-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers,}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ dist, }\AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{, }\AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-15-2.png} In
+general the pricey rooms are near to the centre of the city.
+
+\hypertarget{real-sum-vs-attraction-index-normal}{%
+\subsubsection{Real Sum vs Attraction Index
+Normal}\label{real-sum-vs-attraction-index-normal}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ attr\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-16-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ attr\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-16-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ attr\_index\_norm), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers,}
+    \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ attr\_index\_norm), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-16-3.png}
+
+The range of values falling b/w outliers and normal data is almost same
+. So there isn't a relationship b/w attr\_index and realSum.
+
+\hypertarget{real-sum-vs-restaurant-index-normal}{%
+\subsubsection{Real Sum vs Restaurant Index
+Normal}\label{real-sum-vs-restaurant-index-normal}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-17-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-17-2.png}
+
+There is no relationship between outliers and rest\_index
+
+\hypertarget{room-type-vs-real-sum}{%
+\subsubsection{Room Type Vs Real Sum}\label{room-type-vs-real-sum}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ room\_type, }\AttributeTok{group =}\NormalTok{ room\_type)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-18-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ room\_type, }\AttributeTok{group =}\NormalTok{ room\_type)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-18-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ room\_type, }\AttributeTok{group =}\NormalTok{ room\_type)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-18-3.png}
+
+The price of entire home/apt tend to be higher compared to other two
+categories. And the count of entire home /apt is also more.
+
+\hypertarget{room-type-vs-person-capacity}{%
+\subsubsection{Room Type Vs Person
+Capacity}\label{room-type-vs-person-capacity}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ person\_capacity, }\AttributeTok{group =}\NormalTok{ person\_capacity)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-19-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ person\_capacity,}
+    \AttributeTok{group =}\NormalTok{ person\_capacity)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{), }\AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-19-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ person\_capacity,}
+    \AttributeTok{group =}\NormalTok{ person\_capacity)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{), }\AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-19-3.png}
+
+The overall price is distributed similarly across the spectrum
+irrespective of person\_capacity. But for some cities like london,
+london\_weekdays, lisbon the price is higher with person capacity. So,
+person capacity along with city will be an important variable for
+determining price.
+
+\hypertarget{real-sum-vs-host_is_superhost}{%
+\subsubsection{Real Sum Vs
+host\_is\_superhost}\label{real-sum-vs-host_is_superhost}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ host\_is\_superhost, }\AttributeTok{group =}\NormalTok{ host\_is\_superhost)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-20-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ host\_is\_superhost,}
+    \AttributeTok{group =}\NormalTok{ host\_is\_superhost)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
+    \AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-20-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ host\_is\_superhost,}
+    \AttributeTok{group =}\NormalTok{ host\_is\_superhost)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
+    \AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-20-3.png}
+
+The prices are spread across all the spectrum irrespective of
+super\_host or not.
+
+\hypertarget{real-sum-vs-multi}{%
+\subsubsection{Real Sum Vs multi}\label{real-sum-vs-multi}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ multi, }\AttributeTok{group =}\NormalTok{ multi)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-21-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ multi, }\AttributeTok{group =}\NormalTok{ multi)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-21-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ multi, }\AttributeTok{group =}\NormalTok{ multi)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-21-3.png}
+
+The prices are similar irrespective of multi or not.
+
+\hypertarget{real-sum-vs-biz}{%
+\subsubsection{Real Sum Vs biz}\label{real-sum-vs-biz}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ biz, }\AttributeTok{group =}\NormalTok{ biz)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-22-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ biz, }\AttributeTok{group =}\NormalTok{ biz)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-22-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ biz, }\AttributeTok{group =}\NormalTok{ biz)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-22-3.png}
+
+The prices are similar irrespective of biz or not.
+
+\hypertarget{real-sum-vs-cleanliness}{%
+\subsubsection{Real Sum vs Cleanliness}\label{real-sum-vs-cleanliness}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ cleanliness\_rating, }\AttributeTok{group =}\NormalTok{ cleanliness\_rating)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-23-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ cleanliness\_rating,}
+    \AttributeTok{group =}\NormalTok{ cleanliness\_rating)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
+    \AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-23-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ cleanliness\_rating,}
+    \AttributeTok{group =}\NormalTok{ cleanliness\_rating)) }\SpecialCharTok{+} \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.5}\NormalTok{,}
+    \AttributeTok{nbins =} \DecValTok{20}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-23-3.png}
+
+The cleanliness rating doesn't really have an effect on price
+
+\hypertarget{scatterplot-of-price-vs-guest-satisfaction-filtered-by-city}{%
+\subsubsection{Scatterplot of Price vs Guest Satisfaction filtered by
+city}\label{scatterplot-of-price-vs-guest-satisfaction-filtered-by-city}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ guest\_satisfaction\_overall,}
+    \AttributeTok{color =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{xlab}\NormalTok{(}\StringTok{"Price"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Guest Satisfaction Overall"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"City{-}Day"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-24-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{y =}\NormalTok{ guest\_satisfaction\_overall,}
+    \AttributeTok{color =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{xlab}\NormalTok{(}\StringTok{"Price"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ylab}\NormalTok{(}\StringTok{"Guest Satisfaction Overall"}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_discrete}\NormalTok{(}\AttributeTok{name =} \StringTok{"City{-}Day"}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-24-2.png}
+
+The plot depicts that there is no correlation of price with guest
+satisfaction, good satisfaction rate is found across all the prices. In
+some cities like lonon, we can see a group of reviews with low guest
+satisfaction.
+
+\hypertarget{real-sum-vs-bedroom-count}{%
+\subsubsection{Real Sum Vs Bedroom
+Count}\label{real-sum-vs-bedroom-count}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ bedrooms, }\AttributeTok{group =}\NormalTok{ bedrooms)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-25-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ bedrooms, }\AttributeTok{group =}\NormalTok{ bedrooms)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-25-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ bedrooms, }\AttributeTok{group =}\NormalTok{ bedrooms)) }\SpecialCharTok{+}
+    \FunctionTok{geom\_histogram}\NormalTok{(}\AttributeTok{alpha =} \FloatTok{0.6}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{14}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-25-3.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(city\_day, bedrooms,}
+    \AttributeTok{FUN =}\NormalTok{ median), }\AttributeTok{y =}\NormalTok{ bedrooms, }\AttributeTok{fill =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.key.height =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\StringTok{"cm"}\NormalTok{),}
+    \AttributeTok{legend.key.size =} \FunctionTok{unit}\NormalTok{(}\DecValTok{1}\NormalTok{, }\StringTok{"lines"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-26-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(}\FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{factor}\NormalTok{(my\_data}\SpecialCharTok{$}\NormalTok{multi)), }\FunctionTok{as.numeric}\NormalTok{(}\FunctionTok{factor}\NormalTok{(my\_data}\SpecialCharTok{$}\NormalTok{biz)))}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] -0.4707248
+\end{verbatim}
+
+\hypertarget{non-outlier-analysis}{%
+\subsection{Non Outlier Analysis}\label{non-outlier-analysis}}
+
+\hypertarget{boxplot-of-price-vs-city}{%
+\subsubsection{Boxplot of Price Vs
+City}\label{boxplot-of-price-vs-city}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =} \FunctionTok{reorder}\NormalTok{(city\_day, realSum, }\AttributeTok{FUN =}\NormalTok{ median),}
+    \AttributeTok{y =}\NormalTok{ realSum, }\AttributeTok{fill =}\NormalTok{ city\_day)) }\SpecialCharTok{+} \FunctionTok{geom\_boxplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{coord\_flip}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{theme}\NormalTok{(}\AttributeTok{legend.key.height =} \FunctionTok{unit}\NormalTok{(}\FloatTok{0.5}\NormalTok{, }\StringTok{"cm"}\NormalTok{), }\AttributeTok{legend.key.size =} \FunctionTok{unit}\NormalTok{(}\DecValTok{1}\NormalTok{,}
+        \StringTok{"lines"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-28-1.png}
+
+The highest prices in Europe are found in Amsterdam.
+
+\hypertarget{density-plot-of-price-vs-room-type}{%
+\subsubsection{Density plot of Price vs Room
+type}\label{density-plot-of-price-vs-room-type}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ realSum, }\AttributeTok{group =}\NormalTok{ room\_type,}
+    \AttributeTok{fill =}\NormalTok{ room\_type, }\AttributeTok{alpha =} \FloatTok{0.2}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{geom\_density}\NormalTok{()}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-29-1.png}
+
+The prices of entire home are high comparatively
+
+\hypertarget{scatterplot-of-prices-in-rome-w.r.t-latitude-and-longitude-during-weekdays}{%
+\subsubsection{Scatterplot of Prices in Rome w.r.t Latitude and
+Longitude during
+weekdays}\label{scatterplot-of-prices-in-rome-w.r.t-latitude-and-longitude-during-weekdays}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{tema }\OtherTok{\textless{}{-}} \FunctionTok{theme}\NormalTok{(}\AttributeTok{plot.title =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{23}\NormalTok{, }\AttributeTok{hjust =} \FloatTok{0.5}\NormalTok{),}
+    \AttributeTok{axis.text.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{axis.text.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{,}
+        \AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{axis.title.x =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{),}
+    \AttributeTok{axis.title.y =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{size =} \DecValTok{19}\NormalTok{), }\AttributeTok{legend.text =} \FunctionTok{element\_text}\NormalTok{(}\AttributeTok{colour =} \StringTok{"black"}\NormalTok{,}
+        \AttributeTok{size =} \DecValTok{19}\NormalTok{, }\AttributeTok{face =} \StringTok{"bold"}\NormalTok{), }\AttributeTok{legend.background =} \FunctionTok{element\_rect}\NormalTok{(}\AttributeTok{fill =} \StringTok{"\#F5FFFA"}\NormalTok{,}
+        \AttributeTok{size =} \FloatTok{0.5}\NormalTok{, }\AttributeTok{linetype =} \StringTok{"dashed"}\NormalTok{, }\AttributeTok{colour =} \StringTok{"black"}\NormalTok{))}
+
+\NormalTok{rome\_data }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_filtered }\SpecialCharTok{\%\textgreater{}\%}
+    \FunctionTok{subset}\NormalTok{(city\_day }\SpecialCharTok{==} \StringTok{"rome\_weekdays"}\NormalTok{)}
+
+\FunctionTok{ggplot}\NormalTok{(}\AttributeTok{data =}\NormalTok{ rome\_data, }\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ lat, }\AttributeTok{y =}\NormalTok{ lng)) }\SpecialCharTok{+} \FunctionTok{theme\_minimal}\NormalTok{() }\SpecialCharTok{+}
+    \FunctionTok{scale\_fill\_identity}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{mapping =} \FunctionTok{aes}\NormalTok{(}\AttributeTok{color =}\NormalTok{ realSum),}
+    \AttributeTok{size =} \DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{ggtitle}\NormalTok{(}\StringTok{""}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ tema}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-30-1.png}
+
+This plot is within expectations of general trends, which suggests
+similar types of establishments (price and hospitality) tend be in
+clusters.
+
+\hypertarget{different-model-selection-and-training}{%
+\section{Different Model Selection and
+Training}\label{different-model-selection-and-training}}
+
+\hypertarget{checking-for-correlations-between-different-attributes}{%
+\subsection{Checking for correlations between different
+attributes}\label{checking-for-correlations-between-different-attributes}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggpairs}\NormalTok{(my\_data[}\FunctionTok{c}\NormalTok{(}\StringTok{"realSum"}\NormalTok{, }\StringTok{"dist"}\NormalTok{, }\StringTok{"metro\_dist"}\NormalTok{, }\StringTok{"attr\_index\_norm"}\NormalTok{,}
+    \StringTok{"rest\_index\_norm"}\NormalTok{, }\StringTok{"city\_day"}\NormalTok{)], }\AttributeTok{cardinality =} \DecValTok{20}\NormalTok{, }\AttributeTok{cardinality\_threshold =} \DecValTok{999}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-31-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggpairs}\NormalTok{(my\_data\_filtered[}\FunctionTok{c}\NormalTok{(}\StringTok{"realSum"}\NormalTok{, }\StringTok{"dist"}\NormalTok{, }\StringTok{"metro\_dist"}\NormalTok{, }\StringTok{"attr\_index\_norm"}\NormalTok{,}
+    \StringTok{"rest\_index\_norm"}\NormalTok{, }\StringTok{"city\_day"}\NormalTok{)], }\AttributeTok{cardinality =} \DecValTok{20}\NormalTok{, }\AttributeTok{cardinality\_threshold =} \DecValTok{999}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-32-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(my\_data}\SpecialCharTok{$}\NormalTok{attr\_index, my\_data}\SpecialCharTok{$}\NormalTok{rest\_index)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4721427
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-34-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_outliers, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm, }\AttributeTok{y =}\NormalTok{ rest\_index\_norm,}
+        \AttributeTok{color =} \StringTok{"Outliers"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{,}
+    \AttributeTok{Outliers =} \StringTok{"red"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-34-2.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{))}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-34-3.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{(}\AttributeTok{data =}\NormalTok{ my\_data, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm,}
+    \AttributeTok{y =}\NormalTok{ rest\_index\_norm, }\AttributeTok{color =} \StringTok{"Filtered Data"}\NormalTok{), }\AttributeTok{alpha =} \FloatTok{0.4}\NormalTok{) }\SpecialCharTok{+}
+    \FunctionTok{scale\_color\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\StringTok{\textasciigrave{}}\AttributeTok{Filtered Data}\StringTok{\textasciigrave{}} \OtherTok{=} \StringTok{"blue"}\NormalTok{)) }\SpecialCharTok{+}
+    \FunctionTok{facet\_wrap}\NormalTok{(}\SpecialCharTok{\textasciitilde{}}\NormalTok{city\_day)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-34-4.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cor}\NormalTok{(my\_data}\SpecialCharTok{$}\NormalTok{attr\_index\_norm, my\_data}\SpecialCharTok{$}\NormalTok{rest\_index\_norm)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.4721427
+\end{verbatim}
+
 \hypertarget{linear-regression}{%
 \subsection{Linear Regression}\label{linear-regression}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{M1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\NormalTok{M1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
 \FunctionTok{summary}\NormalTok{(M1)}
 \end{Highlighting}
 \end{Shaded}
@@ -821,207 +1279,462 @@ vienna\_weekends & 1799 & 4.113396 \\
 \begin{verbatim}
 ## 
 ## Call:
-## lm(formula = realSum ~ . - realSum - city_day, data = my_data_train)
+## lm(formula = realSum ~ . - realSum, data = my_data_train)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-##  -871.8   -91.5   -23.6    45.4 18473.9 
+##  -757.5   -84.1   -21.0    43.0 18422.1 
 ## 
-## Coefficients: (2 not defined because of singularities)
+## Coefficients:
 ##                              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)                -5.755e+02  2.995e+01 -19.212  < 2e-16 ***
-## X                          -7.886e-03  1.478e-03  -5.335 9.61e-08 ***
-## room_typePrivate room      -1.102e+02  4.160e+00 -26.505  < 2e-16 ***
-## room_typeShared room       -1.998e+02  1.919e+01 -10.408  < 2e-16 ***
-## room_sharedTrue                    NA         NA      NA       NA    
-## room_privateTrue                   NA         NA      NA       NA    
-## person_capacity             1.974e+01  1.792e+00  11.017  < 2e-16 ***
-## host_is_superhostTrue      -2.224e+00  3.995e+00  -0.557 0.577722    
-## multi                      -7.342e-01  4.180e+00  -0.176 0.860570    
-## biz                         1.322e+01  4.181e+00   3.161 0.001572 ** 
-## cleanliness_rating          5.685e+00  2.456e+00   2.315 0.020639 *  
-## guest_satisfaction_overall  7.461e-01  2.660e-01   2.805 0.005042 ** 
-## bedrooms                    9.316e+01  3.226e+00  28.881  < 2e-16 ***
-## dist                       -6.242e+00  1.123e+00  -5.556 2.78e-08 ***
-## metro_dist                 -6.913e+00  2.360e+00  -2.929 0.003398 ** 
-## attr_index                  8.638e-02  1.984e-02   4.354 1.34e-05 ***
-## attr_index_norm             4.554e+00  3.722e-01  12.235  < 2e-16 ***
-## rest_index                  9.112e-04  7.446e-03   0.122 0.902598    
-## rest_index_norm            -5.321e-01  1.372e-01  -3.877 0.000106 ***
-## lng                        -5.587e+00  1.880e-01 -29.724  < 2e-16 ***
-## lat                         1.323e+01  5.255e-01  25.170  < 2e-16 ***
+## (Intercept)                -4.916e+03  3.997e+03  -1.230 0.218657    
+## X                           1.026e-03  1.605e-03   0.639 0.522652    
+## room_typePrivate room      -1.144e+02  4.282e+00 -26.703  < 2e-16 ***
+## room_typeShared room       -2.043e+02  1.894e+01 -10.790  < 2e-16 ***
+## person_capacity             2.396e+01  1.765e+00  13.578  < 2e-16 ***
+## host_is_superhostTrue       1.152e+00  3.936e+00   0.293 0.769759    
+## multi                       9.638e+00  4.133e+00   2.332 0.019704 *  
+## biz                         3.332e+01  4.189e+00   7.954 1.85e-15 ***
+## cleanliness_rating          5.045e+00  2.415e+00   2.089 0.036740 *  
+## guest_satisfaction_overall  7.759e-01  2.615e-01   2.968 0.003003 ** 
+## bedrooms                    8.599e+01  3.189e+00  26.965  < 2e-16 ***
+## dist                       -1.538e+00  1.263e+00  -1.218 0.223192    
+## metro_dist                 -3.879e+00  2.509e+00  -1.546 0.122147    
+## attr_index_norm             6.375e+00  2.946e-01  21.636  < 2e-16 ***
+## rest_index_norm            -1.736e-01  1.781e-01  -0.975 0.329728    
+## lng                        -2.619e+02  4.023e+01  -6.510 7.63e-11 ***
+## lat                         1.224e+02  7.653e+01   1.599 0.109884    
+## city_dayamsterdam_weekends  6.796e+01  1.600e+01   4.247 2.17e-05 ***
+## city_dayathens_weekdays     6.283e+03  1.389e+03   4.522 6.15e-06 ***
+## city_dayathens_weekends     6.271e+03  1.390e+03   4.513 6.41e-06 ***
+## city_daybarcelona_weekdays  4.051e+02  8.379e+02   0.483 0.628751    
+## city_daybarcelona_weekends  4.231e+02  8.379e+02   0.505 0.613579    
+## city_dayberlin_weekdays     1.940e+03  3.424e+02   5.666 1.47e-08 ***
+## city_dayberlin_weekends     1.950e+03  3.423e+02   5.697 1.23e-08 ***
+## city_daybudapest_weekdays   3.883e+03  7.075e+02   5.488 4.09e-08 ***
+## city_daybudapest_weekends   3.910e+03  7.075e+02   5.527 3.28e-08 ***
+## city_daylisbon_weekdays    -2.311e+03  1.144e+03  -2.020 0.043372 *  
+## city_daylisbon_weekends    -2.302e+03  1.144e+03  -2.013 0.044164 *  
+## city_daylondon_weekdays    -1.407e+03  2.062e+02  -6.823 9.06e-12 ***
+## city_daylondon_weekends    -1.409e+03  2.062e+02  -6.833 8.47e-12 ***
+## city_dayparis_weekdays     -4.046e+02  2.785e+02  -1.453 0.146310    
+## city_dayparis_weekends     -4.238e+02  2.787e+02  -1.521 0.128294    
+## city_dayrome_weekdays       2.929e+03  8.819e+02   3.322 0.000896 ***
+## city_dayrome_weekends       2.934e+03  8.819e+02   3.327 0.000879 ***
+## city_dayvienna_weekdays     3.216e+03  5.832e+02   5.515 3.51e-08 ***
+## city_dayvienna_weekends     3.215e+03  5.833e+02   5.511 3.59e-08 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 310.6 on 36175 degrees of freedom
-## Multiple R-squared:  0.1858, Adjusted R-squared:  0.1854 
-## F-statistic: 458.7 on 18 and 36175 DF,  p-value: < 2.2e-16
+## Residual standard error: 305.1 on 36158 degrees of freedom
+## Multiple R-squared:  0.2151, Adjusted R-squared:  0.2143 
+## F-statistic:   283 on 35 and 36158 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
-\hypertarget{checking-for-multi-collinearity}{%
-\subsubsection{Checking for Multi
-Collinearity}\label{checking-for-multi-collinearity}}
+The r\^{}2 and adjusted r\^{}2 values are too low for the Linear
+regression model to be considered a competent one in this case.
+
+\hypertarget{lasso-step-regression}{%
+\subsection{Lasso Step Regression}\label{lasso-step-regression}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{alias}\NormalTok{(M1)}
+\NormalTok{M1\_step }\OtherTok{=} \FunctionTok{step}\NormalTok{(M1, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Model :
-## realSum ~ (X + room_type + room_shared + room_private + person_capacity + 
-##     host_is_superhost + multi + biz + cleanliness_rating + guest_satisfaction_overall + 
-##     bedrooms + dist + metro_dist + attr_index + attr_index_norm + 
-##     rest_index + rest_index_norm + lng + lat + city_day) - realSum - 
-##     city_day
+## Start:  AIC=414133.9
+## realSum ~ (X + room_type + person_capacity + host_is_superhost + 
+##     multi + biz + cleanliness_rating + guest_satisfaction_overall + 
+##     bedrooms + dist + metro_dist + attr_index_norm + rest_index_norm + 
+##     lng + lat + city_day) - realSum
 ## 
-## Complete :
-##                  (Intercept) X room_typePrivate room room_typeShared room
-## room_sharedTrue  0           0 0                     1                   
-## room_privateTrue 0           0 1                     0                   
-##                  person_capacity host_is_superhostTrue multi biz
-## room_sharedTrue  0               0                     0     0  
-## room_privateTrue 0               0                     0     0  
-##                  cleanliness_rating guest_satisfaction_overall bedrooms dist
-## room_sharedTrue  0                  0                          0        0   
-## room_privateTrue 0                  0                          0        0   
-##                  metro_dist attr_index attr_index_norm rest_index
-## room_sharedTrue  0          0          0               0         
-## room_privateTrue 0          0          0               0         
-##                  rest_index_norm lng lat
-## room_sharedTrue  0               0   0  
-## room_privateTrue 0               0   0
+##                              Df Sum of Sq        RSS    AIC
+## - host_is_superhost           1      7973 3365094746 414132
+## - X                           1     38033 3365124806 414132
+## - rest_index_norm             1     88412 3365175185 414133
+## - dist                        1    138090 3365224863 414133
+## <none>                                    3365086773 414134
+## - metro_dist                  1    222399 3365309172 414134
+## - lat                         1    237878 3365324651 414134
+## - cleanliness_rating          1    406023 3365492796 414136
+## - multi                       1    506134 3365592907 414137
+## - guest_satisfaction_overall  1    819629 3365906402 414141
+## - lng                         1   3943764 3369030537 414174
+## - biz                         1   5888249 3370975022 414195
+## - person_capacity             1  17158129 3382244902 414316
+## - attr_index_norm             1  43565736 3408652509 414598
+## - bedrooms                    1  67668883 3432755656 414853
+## - room_type                   2  74087785 3439174558 414918
+## - city_day                   19 129073720 3494160493 415458
+## 
+## Step:  AIC=414132
+## realSum ~ X + room_type + person_capacity + multi + biz + cleanliness_rating + 
+##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
+##     attr_index_norm + rest_index_norm + lng + lat + city_day
+## 
+##                              Df Sum of Sq        RSS    AIC
+## - X                           1     37006 3365131752 414130
+## - rest_index_norm             1     87739 3365182485 414131
+## - dist                        1    137403 3365232149 414131
+## <none>                                    3365094746 414132
+## - metro_dist                  1    224011 3365318757 414132
+## - lat                         1    236846 3365331592 414133
+## - cleanliness_rating          1    422853 3365517599 414135
+## - multi                       1    513494 3365608240 414136
+## - guest_satisfaction_overall  1    846062 3365940808 414139
+## - lng                         1   3943452 3369038198 414172
+## - biz                         1   5880284 3370975030 414193
+## - person_capacity             1  17156242 3382250987 414314
+## - attr_index_norm             1  43564593 3408659339 414596
+## - bedrooms                    1  67662885 3432757630 414851
+## - room_type                   2  74127027 3439221773 414917
+## - city_day                   19 129091002 3494185748 415457
+## 
+## Step:  AIC=414130.4
+## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
+##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
+##     attr_index_norm + rest_index_norm + lng + lat + city_day
+## 
+##                              Df Sum of Sq        RSS    AIC
+## - rest_index_norm             1     99078 3365230830 414129
+## - dist                        1    136528 3365268280 414130
+## <none>                                    3365131752 414130
+## - metro_dist                  1    238734 3365370486 414131
+## - lat                         1    240263 3365372016 414131
+## - cleanliness_rating          1    420972 3365552724 414133
+## - multi                       1    509297 3365641049 414134
+## - guest_satisfaction_overall  1    845143 3365976896 414138
+## - lng                         1   3980694 3369112446 414171
+## - biz                         1   5868776 3371000528 414191
+## - person_capacity             1  17162129 3382293881 414313
+## - attr_index_norm             1  43529070 3408660822 414594
+## - bedrooms                    1  67709766 3432841518 414849
+## - room_type                   2  74127155 3439258907 414915
+## - city_day                   19 130900670 3496032422 415474
+## 
+## Step:  AIC=414129.5
+## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
+##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
+##     attr_index_norm + lng + lat + city_day
+## 
+##                              Df Sum of Sq        RSS    AIC
+## - dist                        1     86683 3365317513 414128
+## <none>                                    3365230830 414129
+## - metro_dist                  1    272120 3365502950 414130
+## - lat                         1    273162 3365503992 414130
+## - cleanliness_rating          1    419524 3365650354 414132
+## - multi                       1    494022 3365724852 414133
+## - guest_satisfaction_overall  1    837305 3366068136 414136
+## - lng                         1   3973420 3369204250 414170
+## - biz                         1   5789568 3371020398 414190
+## - person_capacity             1  17121733 3382352564 414311
+## - attr_index_norm             1  54609498 3419840328 414710
+## - bedrooms                    1  67904086 3433134916 414851
+## - room_type                   2  74039649 3439270479 414913
+## - city_day                   19 131071208 3496302038 415474
+## 
+## Step:  AIC=414128.4
+## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
+##     guest_satisfaction_overall + bedrooms + metro_dist + attr_index_norm + 
+##     lng + lat + city_day
+## 
+##                              Df Sum of Sq        RSS    AIC
+## <none>                                    3365317513 414128
+## - lat                         1    292396 3365609909 414130
+## - cleanliness_rating          1    414092 3365731605 414131
+## - multi                       1    495582 3365813095 414132
+## - metro_dist                  1    614735 3365932248 414133
+## - guest_satisfaction_overall  1    838098 3366155612 414135
+## - lng                         1   3887405 3369204918 414168
+## - biz                         1   5842686 3371160199 414189
+## - person_capacity             1  17112579 3382430092 414310
+## - bedrooms                    1  67830738 3433148251 414849
+## - room_type                   2  74300129 3439617642 414915
+## - attr_index_norm             1  86947824 3452265337 415050
+## - city_day                   19 133905560 3499223073 415503
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Calculate the VIFs}
-\NormalTok{M2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ city\_day }\SpecialCharTok{{-}}\NormalTok{ room\_type, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
-\FunctionTok{vif}\NormalTok{(M2)}
+\FunctionTok{summary}\NormalTok{(M1\_step)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-##                          X                room_shared 
-##                   1.215469                   1.015685 
-##               room_private            person_capacity 
-##                   1.502068                   2.034193 
-##          host_is_superhost                      multi 
-##                   1.137854                   1.355783 
-##                        biz         cleanliness_rating 
-##                   1.487035                   2.051483 
-## guest_satisfaction_overall                   bedrooms 
-##                   2.132586                   1.555173 
-##                       dist                 metro_dist 
-##                   2.775926                   1.575344 
-##                 attr_index            attr_index_norm 
-##                   7.361432                   4.959117 
-##                 rest_index            rest_index_norm 
-##                   5.139643                   2.249142 
-##                        lng                        lat 
-##                   1.270706                   2.853201
+## 
+## Call:
+## lm(formula = realSum ~ room_type + person_capacity + multi + 
+##     biz + cleanliness_rating + guest_satisfaction_overall + bedrooms + 
+##     metro_dist + attr_index_norm + lng + lat + city_day, data = my_data_train)
+## 
+## Residuals:
+##     Min      1Q  Median      3Q     Max 
+##  -756.8   -84.1   -21.0    42.9 18422.9 
+## 
+## Coefficients:
+##                              Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)                -5594.6616  3968.4120  -1.410 0.158608    
+## room_typePrivate room       -114.3509     4.2751 -26.748  < 2e-16 ***
+## room_typeShared room        -203.5745    18.9242 -10.757  < 2e-16 ***
+## person_capacity               23.9228     1.7642  13.560  < 2e-16 ***
+## multi                          9.5185     4.1248   2.308 0.021024 *  
+## biz                           33.0599     4.1724   7.924 2.37e-15 ***
+## cleanliness_rating             5.0657     2.4015   2.109 0.034916 *  
+## guest_satisfaction_overall     0.7802     0.2600   3.001 0.002693 ** 
+## bedrooms                      86.0342     3.1867  26.998  < 2e-16 ***
+## metro_dist                    -5.4925     2.1370  -2.570 0.010170 *  
+## attr_index_norm                6.3667     0.2083  30.566  < 2e-16 ***
+## lng                         -257.3918    39.8246  -6.463 1.04e-10 ***
+## lat                          134.7768    76.0355   1.773 0.076312 .  
+## city_dayamsterdam_weekends    67.1363    15.9781   4.202 2.65e-05 ***
+## city_dayathens_weekdays     6380.0626  1384.2639   4.609 4.06e-06 ***
+## city_dayathens_weekends     6370.9186  1384.2104   4.603 4.19e-06 ***
+## city_daybarcelona_weekdays   554.5173   831.2840   0.667 0.504737    
+## city_daybarcelona_weekends   572.4049   831.2994   0.689 0.491101    
+## city_dayberlin_weekdays     1895.1920   338.3471   5.601 2.14e-08 ***
+## city_dayberlin_weekends     1904.8977   338.2674   5.631 1.80e-08 ***
+## city_daybudapest_weekdays   3880.0408   704.0633   5.511 3.59e-08 ***
+## city_daybudapest_weekends   3906.3502   704.0708   5.548 2.91e-08 ***
+## city_daylisbon_weekdays    -2077.4612  1130.8273  -1.837 0.066201 .  
+## city_daylisbon_weekends    -2069.6484  1130.8363  -1.830 0.067229 .  
+## city_daylondon_weekdays    -1373.5039   204.1097  -6.729 1.73e-11 ***
+## city_daylondon_weekends    -1375.1043   204.1230  -6.737 1.65e-11 ***
+## city_dayparis_weekdays      -354.6025   276.2027  -1.284 0.199203    
+## city_dayparis_weekends      -371.8162   276.2127  -1.346 0.178271    
+## city_dayrome_weekdays       3026.1639   878.2040   3.446 0.000570 ***
+## city_dayrome_weekends       3031.0164   878.2293   3.451 0.000559 ***
+## city_dayvienna_weekdays     3219.2260   580.2311   5.548 2.91e-08 ***
+## city_dayvienna_weekends     3217.6304   580.3196   5.545 2.97e-08 ***
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
+## 
+## Residual standard error: 305.1 on 36162 degrees of freedom
+## Multiple R-squared:  0.215,  Adjusted R-squared:  0.2143 
+## F-statistic: 319.5 on 31 and 36162 DF,  p-value: < 2.2e-16
 \end{verbatim}
 
-\hypertarget{autoplots}{%
-\subsubsection{Autoplots}\label{autoplots}}
+The stepwise regression removed - host\_is\_superhost,
+rest\_index\_norm, dist
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{autoplot}\NormalTok{(M1)}
-\end{Highlighting}
-\end{Shaded}
+\NormalTok{lm\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1\_step, }\AttributeTok{newdata =}\NormalTok{ my\_data\_test)}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-24-1.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{autoplot}\NormalTok{(M1, }\AttributeTok{which =} \DecValTok{4}\NormalTok{)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-24-2.pdf}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\FunctionTok{avPlots}\NormalTok{(M1)}
-\end{Highlighting}
-\end{Shaded}
-
-\includegraphics{Project_files/figure-latex/unnamed-chunk-24-3.pdf}
-\includegraphics{Project_files/figure-latex/unnamed-chunk-24-4.pdf}
-\includegraphics{Project_files/figure-latex/unnamed-chunk-24-5.pdf}
-
-\hypertarget{cooks-distance}{%
-\subsubsection{Cooks Distance}\label{cooks-distance}}
-
-\begin{Shaded}
-\begin{Highlighting}[]
-\NormalTok{cooksd }\OtherTok{\textless{}{-}} \FunctionTok{cooks.distance}\NormalTok{(M1)}
-\FunctionTok{max}\NormalTok{(cooksd)}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lm\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{RMSE}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3151076
+## [1] 233.2787
 \end{verbatim}
-
-\hypertarget{cooks-distance-v2}{%
-\subsubsection{Cooks Distance V2}\label{cooks-distance-v2}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{augment\_M1 }\OtherTok{=} \FunctionTok{data.frame}\NormalTok{(}\FunctionTok{augment}\NormalTok{(M1))}
-\FunctionTok{max}\NormalTok{(augment\_M1}\SpecialCharTok{$}\NormalTok{.cooksd)}
+\CommentTok{\# Prepare the predictors and response variable}
+\NormalTok{x\_train }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
+\NormalTok{    lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum}
+
+\CommentTok{\# Fit a Lasso regression model}
+\NormalTok{lasso\_model }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# Select the best lambda value using cross{-}validation}
+\NormalTok{cv\_model }\OtherTok{\textless{}{-}} \FunctionTok{cv.glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{nfolds =} \DecValTok{5}\NormalTok{)}
+
+\CommentTok{\# Plot the cross{-}validation results}
+\FunctionTok{plot}\NormalTok{(cv\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-40-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select the lambda value that minimizes the mean}
+\CommentTok{\# cross{-}validation error}
+\NormalTok{best\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ cv\_model}\SpecialCharTok{$}\NormalTok{lambda.min}
+
+\CommentTok{\# Fit a Lasso regression model with the selected lambda}
+\CommentTok{\# value}
+\NormalTok{lasso\_model\_best }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{lambda =}\NormalTok{ best\_lambda)}
+
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_train)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{multiple\_R\_squared }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(y\_train\_pred, y\_train)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_train)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 0.3151076
+## R-squared: 0.214
 \end{verbatim}
-
-\hypertarget{prediction-analysis}{%
-\subsubsection{Prediction Analysis}\label{prediction-analysis}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{my\_data\_test\_spread }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{spread\_predictions}\NormalTok{(M1)}
-\NormalTok{my\_data\_test\_spread }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test }\SpecialCharTok{\%\textgreater{}\%}
-    \FunctionTok{spread\_residuals}\NormalTok{(M1)}
-\FunctionTok{mean}\NormalTok{(my\_data\_test\_spread}\SpecialCharTok{$}\NormalTok{M1)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Multiple R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(multiple\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] -0.9869423
+## Multiple R-squared: 0.214
 \end{verbatim}
-
-\hypertarget{lasso-regression}{%
-\subsection{Lasso Regression}\label{lasso-regression}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{x }\OtherTok{\textless{}{-}} \FunctionTok{as.matrix}\NormalTok{(my\_data[, }\FunctionTok{c}\NormalTok{(}\StringTok{"room\_type"}\NormalTok{, }\StringTok{"room\_shared"}\NormalTok{, }\StringTok{"room\_private"}\NormalTok{,}
-    \StringTok{"person\_capacity"}\NormalTok{, }\StringTok{"host\_is\_superhost"}\NormalTok{, }\StringTok{"multi"}\NormalTok{, }\StringTok{"biz"}\NormalTok{, }\StringTok{"cleanliness\_rating"}\NormalTok{,}
-    \StringTok{"guest\_satisfaction\_overall"}\NormalTok{, }\StringTok{"bedrooms"}\NormalTok{, }\StringTok{"dist"}\NormalTok{, }\StringTok{"metro\_dist"}\NormalTok{,}
-    \StringTok{"attr\_index"}\NormalTok{, }\StringTok{"attr\_index\_norm"}\NormalTok{, }\StringTok{"rest\_index"}\NormalTok{, }\StringTok{"rest\_index\_norm"}\NormalTok{,}
-    \StringTok{"lng"}\NormalTok{, }\StringTok{"lat"}\NormalTok{, }\StringTok{"city\_day"}\NormalTok{)])}
-\NormalTok{y }\OtherTok{\textless{}{-}}\NormalTok{ my\_data}\SpecialCharTok{$}\NormalTok{realSum}
-\NormalTok{lasso.fit }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x, y, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
-\FunctionTok{plot}\NormalTok{(lasso.fit, }\AttributeTok{xvar =} \StringTok{"lambda"}\NormalTok{, }\AttributeTok{label =} \ConstantTok{TRUE}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(adj\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-28-1.pdf}
+\begin{verbatim}
+## Adjusted R-squared: 0.213
+\end{verbatim}
 
-\hypertarget{model-selection}{%
-\section{Model Selection}\label{model-selection}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Predict on the test data}
+\NormalTok{x\_test }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
+\NormalTok{    lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
+\NormalTok{lasso\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
 
-\hypertarget{model-training}{%
-\section{Model Training}\label{model-training}}
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lasso\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(rmse, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\hypertarget{conclusion}{%
-\section{Conclusion}\label{conclusion}}
+\begin{verbatim}
+## RMSE on test set: 233.534
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Prepare the predictors and response variable}
+\NormalTok{x\_train }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[,}
+    \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum}
+
+\CommentTok{\# Fit a Lasso regression model}
+\NormalTok{lasso\_model }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# Select the best lambda value using cross{-}validation}
+\NormalTok{cv\_model }\OtherTok{\textless{}{-}} \FunctionTok{cv.glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{nfolds =} \DecValTok{5}\NormalTok{)}
+
+\CommentTok{\# Plot the cross{-}validation results}
+\FunctionTok{plot}\NormalTok{(cv\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-41-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select the lambda value that minimizes the mean}
+\CommentTok{\# cross{-}validation error}
+\NormalTok{best\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ cv\_model}\SpecialCharTok{$}\NormalTok{lambda.min}
+
+\CommentTok{\# Fit a Lasso regression model with the selected lambda}
+\CommentTok{\# value}
+\NormalTok{lasso\_model\_best }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{lambda =}\NormalTok{ best\_lambda)}
+
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_train)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{multiple\_R\_squared }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(y\_train\_pred, y\_train)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_train)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.214
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Multiple R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(multiple\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Multiple R-squared: 0.214
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(adj\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.213
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Predict on the test data}
+\NormalTok{x\_test }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[,}
+    \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
+\NormalTok{lasso\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
+
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lasso\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(rmse, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE on test set: 235.35
+\end{verbatim}
+
+Even Lasso regression is not good because of extremely low value of
+R\^{}2 even in polynominal model of power 2 and 3.
+
+\hypertarget{conclusion-at-this-point-in-time}{%
+\section{Conclusion at this Point in
+Time}\label{conclusion-at-this-point-in-time}}
+
+Even though EDA has given us good insights in price determinants, both
+Linear and Lasso Step Regression are not good for this case which is to
+be expected since all common data tends to be generally skewed Normal or
+Guassian(to be tested).
+
+Further modelling is required and will be conducted which includes
+trying of different linear techniques and also models from different
+family.
 
 \end{document}
