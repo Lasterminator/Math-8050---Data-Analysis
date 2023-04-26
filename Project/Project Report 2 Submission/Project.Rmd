@@ -1,0 +1,749 @@
+---
+title: "Project"
+author: "Trinath Sai Subhash Reddy Pittala, Uma Maheswara R Meleti, Hemanth Vasireddy"
+date: "`r Sys.Date()`"
+output:
+  pdf_document:
+    keep_tex: yes
+  html_document:
+    code_folding: hide
+    word_wrap: true
+---
+
+
+```{r setup, include=FALSE}
+library(formatR)
+library(tidyverse)
+library(GGally)
+library(ggfortify)
+library(nycflights13)
+library(modelr)
+library(magick)
+library(haven)
+library(dplyr)
+library(ISLR)
+library(broom)
+library(lubridate)
+library(ggplot2)
+library(nycflights13)
+library(knitr)
+library(caret)
+library(car)
+library(kableExtra)
+library(glmnet)
+library(corrplot)
+knitr::opts_chunk$set(width = 60, warning = FALSE, message = FALSE, tidy.opts=list(width.cutoff=60),tidy=TRUE, echo = TRUE, dev = "png")
+```
+
+# Introduction
+
+## Airbnb Price Determinants in Europe
+
+We want to work on Airbnb's dataset from kaggle.com. It provides information about hotel rooms in Europe.
+
+Each major city has its dataset for weekends and weekdays Variables included in the dataset: Host ID (Id) The total price of listing (realSum) Room type: private, shared, entire home, apt (room_type) Whether or not a room is shared (room_shared) Max number of people allowed in property (person_capacity) Whether or not the host is superhost (host_is_superhost) Whether or not it is multiple rooms (multi) Whether for business or family use (biz) Distance from the city center (dist) Distance from nearest metro (metro_dist) Latitude and longitude (lat long) Guest satisfaction (guest_satisfaction_overall) Cleanliness (cleanliness_rating) The total quantity of bedrooms available among all properties for a single host (bedrooms)
+
+Questions we can answer with the dataset: Price Forecasting: use pricing, room type, and amenities to predict potential rental prices in the future. Hotspots: use listing location in relation to business and tourism centers and correlate this with pricing to determine where Airbnb rentals would be most profitable Customer Sentiment Analysis: analyze customer comments and satisfaction ratings to evaluate listing on overall customer experience and use it to optimize hosts' services to improve user satisfaction ratings.
+
+How can this information be used: Data can help travelers find accommodation that meets their needs without exceeding budget. Can help hosts set competitive pricing and optimize listings to get more bookings. Help investors evaluate the value of investing in real estate in different European cities based on pricing trends.
+
+# Pre Processing and Cleaning the Data
+
+## Data loading
+
+```{r}
+# Set the relative directory path
+my_dir <- "./archive"
+
+# List all the files in the directory
+files <- list.files(path = my_dir, full.names = TRUE)
+```
+
+### Combining the Data from all Files
+
+```{r}
+# Get a list of all the csv files in the directory
+file_list <- list.files(path = my_dir, pattern = "*.csv", full.names = TRUE)
+
+# Initialize an empty list to store the data frames
+df_list <- list()
+
+# Loop through each file and read it into a data frame
+for (i in seq_along(file_list)) {
+  df <- read.csv(file_list[i])
+  
+  # Add a new column with the city_day
+  df$city_day <- basename(file_list[i])
+
+  # Append the data frame to the list
+  df_list[[i]] <- df
+}
+
+# Combine all the data frames into a single dataset
+my_data <- bind_rows(df_list)
+
+#Removing the .csv ext
+my_data$city_day <- gsub("\\.csv", "", my_data$city_day)
+
+# Print the first few rows of the data
+head(my_data)
+```
+
+```{r}
+print(unique(my_data[my_data$room_shared == my_data$room_private, ]$room_type)) # if the room is shared 
+```
+
+```{r}
+print(unique(my_data[my_data$room_private=='False', ]$room_type))
+```
+
+```{r}
+print(unique(my_data[my_data$room_shared=='True', ]$room_type))
+```
+
+```{r}
+print(unique(my_data[my_data$room_shared=='False', ]$room_type))
+```
+
+The room_shared and room_private information is already embedded in room_type. The variables are multi-collinear, so we can remove room_shared and room_private.
+
+### Dropping columns of room_shared and room_private
+
+```{r}
+my_data = select(my_data, -c(room_shared, room_private))
+head(my_data)
+```
+
+```{r}
+ggplot() +
+  geom_point(data = my_data, aes(x = attr_index, y = attr_index_norm), alpha = 0.4) 
+
+ggplot() +
+  geom_point(data = my_data, aes(x = attr_index, y = attr_index_norm), alpha = 0.4) +
+  facet_wrap(~city_day)
+```
+
+attr_index and attr_index_norm are same, attr_index_norm is just normalized attr_index
+
+```{r}
+ggplot() +
+  geom_point(data = my_data, aes(x = rest_index, y = rest_index_norm), alpha = 0.4)
+
+ggplot() +
+  geom_point(data = my_data, aes(x = rest_index, y = rest_index_norm), alpha = 0.4) +
+  facet_wrap(~city_day)
+```
+
+rest_index and rest_index_norm are same, rest_index_norm is just normalized rest_index.
+
+removing attr_index and rest_index 
+
+```{r}
+my_data = select(my_data, -c(attr_index, rest_index))
+head(my_data)
+
+```
+
+
+## Outliers using IQR Range
+
+### Filtering out the Outliers from Data Out of IQR Ranges
+
+```{r}
+# Initialize an empty list to store the outliers
+outliers_list <- list()
+
+# Initialize an empty list to store the filtered data frames
+df_list_filtered <- list()
+
+# Loop through each file and read it into a data frame after removing outliers
+for (i in seq_along(file_list)) {
+  df_filtered <- read.csv(file_list[i])
+  
+  # Add a new column with the city_day
+  df_filtered$city_day <- gsub("\\.csv", "", basename(file_list[i]))
+  
+  iqr_var1 <- IQR(df_filtered$realSum)
+
+  # Calculate the upper and lower bounds for each variable
+  upper_var1 <- quantile(df_filtered$realSum, 0.75) + 1.5*iqr_var1
+  lower_var1 <- quantile(df_filtered$realSum, 0.25) - 1.5*iqr_var1
+
+
+  # Filter the data based on the upper and lower bounds for each variable
+  filtered_data <- filter(df_filtered, realSum > lower_var1 & realSum < upper_var1)
+
+
+  # Append the filtered data frame to the list
+  df_list_filtered[[i]] <- filtered_data
+  
+  # Get the rows that were removed while filtering
+  outliers <- anti_join(df_filtered, filtered_data)
+  
+  # Append the outliers to the list
+  outliers_list[[i]] <- outliers
+}
+
+
+# Combine all the filtered data frames into a single dataset
+my_data_filtered <- bind_rows(df_list_filtered)
+
+#Removing the .csv ext
+my_data_filtered$city_day <- gsub("\\.csv", "", my_data_filtered$city_day)
+
+summary(my_data_filtered)
+
+# Combine all the outliers into a single dataset
+my_outliers <- bind_rows(outliers_list)
+
+#Removing the .csv ext
+my_outliers$city_day <- gsub("\\.csv", "", my_outliers$city_day)
+
+summary(my_outliers)
+```
+### Percentage of Outliers outside of IQR range.
+
+```{r}
+# Create empty table
+outliers_table <- data.frame(City_day = character(),
+                             Data_Length = numeric(),
+                             Percent_Outliers = numeric(),
+                             stringsAsFactors = FALSE)
+
+# Loop through city_data and fill in table
+for (city_day in unique(my_data$city_day)){
+  x = my_data[my_data$city_day == city_day, ]$realSum
+  q1 <- quantile(x, 0.25)
+  q3 <- quantile(x, 0.75)
+  iqr <- IQR(x)
+  upper_bound <- q3 + 1.5*iqr
+  lower_bound <- q1 - 1.5*iqr
+  x_no_outliers <- x[x >= lower_bound & x <= upper_bound]
+  percent_outliers <- ((length(x) - length(x_no_outliers))/length(x))*100
+  
+  # Add row to table
+  outliers_table <- rbind(outliers_table, 
+                          data.frame(City_day = city_day, 
+                                     Data_Length = length(x), 
+                                     Percent_Outliers = percent_outliers))
+}
+
+# Format table using kable
+kable(outliers_table, format = "markdown")
+```
+
+
+
+
+## Spilt Training and Testing Data
+
+```{r}
+set.seed(123456789)
+my_data_train <- my_data[sample(nrow(my_data), 0.7*nrow(my_data)), ]
+my_data_test <- my_data[setdiff(1:nrow(my_data), rownames(my_data_train)), ]
+dim(my_data_train)
+dim(my_data_test)
+```
+
+# Exploratory Data Analysis
+
+## Outlier Analysis
+
+### Metro Dist vs Real Sum
+
+We have planned to analyse the filtered data along with outlier data. Here outlier data represents the hotel rooms with high prices.
+
+```{r}
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = metro_dist, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = metro_dist, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red"))
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = metro_dist, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = metro_dist, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red")) +
+  facet_wrap(~city_day)
+```
+In general the rooms that are closer to metro have comparatively higher prices. But, in Rome city the distance to metro is almost same for both categories of price.
+
+### Real Sum vs Distance
+
+```{r}
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = dist, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = dist, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red"))
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = dist, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = dist, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red")) +
+  facet_wrap(~city_day)
+```
+In general the pricey rooms are near to the centre of the city. 
+
+### Real Sum vs Attraction Index Normal
+
+```{r}
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = attr_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = attr_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red"))
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = attr_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = attr_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red")) +
+  facet_wrap(~city_day)
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = attr_index_norm), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = attr_index_norm), alpha = 0.4) 
+```
+
+The range of values falling b/w outliers and normal data is almost same . So there isn't a relationship b/w attr_index and realSum.
+
+### Real Sum vs Restaurant Index Normal
+
+```{r}
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = rest_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red"))
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = realSum, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = realSum, y = rest_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red")) +
+  facet_wrap(~city_day)
+```
+
+There is no relationship between outliers and rest_index
+
+### Room Type Vs Real Sum
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = room_type, group = room_type)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = room_type, group = room_type)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = room_type, group = room_type)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The price of entire home/apt tend to be higher compared to other two categories. And the count of entire home /apt is also more.
+
+### Room Type Vs Person Capacity
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = person_capacity, group = person_capacity)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = person_capacity, group = person_capacity)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = person_capacity, group = person_capacity)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The overall price is distributed similarly across the spectrum irrespective of person_capacity. But for some cities like london, london_weekdays, lisbon the price is higher with person capacity. So, person capacity along with city will be an important variable for determining price.
+
+### Real Sum Vs host_is_superhost
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = host_is_superhost, group = host_is_superhost)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = host_is_superhost, group = host_is_superhost)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = host_is_superhost, group = host_is_superhost)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The prices are spread across all the spectrum irrespective of super_host or not.
+
+### Real Sum Vs multi
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = multi, group = multi)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = multi, group = multi)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = multi, group = multi)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The prices are similar irrespective of multi or not.
+
+### Real Sum Vs biz
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = biz, group = biz)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = biz, group = biz)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = biz, group = biz)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The prices are similar irrespective of biz or not.
+
+### Real Sum vs Cleanliness
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = cleanliness_rating, group = cleanliness_rating)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = cleanliness_rating, group = cleanliness_rating)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = cleanliness_rating, group = cleanliness_rating)) + 
+  geom_histogram(alpha = 0.5, nbins=20) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+The cleanliness rating doesn't really have an effect on price
+
+### Scatterplot of Price vs Guest Satisfaction filtered by city
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data_filtered, aes(x = realSum, y = guest_satisfaction_overall, color = city_day)) +
+  geom_point() +
+  xlab("Price") +
+  ylab("Guest Satisfaction Overall") + 
+  scale_color_discrete(name = "City-Day")
+
+ggplot(my_data_filtered, aes(x = realSum, y = guest_satisfaction_overall, color = city_day)) +
+  geom_point() +
+  xlab("Price") +
+  ylab("Guest Satisfaction Overall") + 
+  scale_color_discrete(name = "City-Day") + facet_wrap(~city_day)
+```
+
+The plot depicts that there is no correlation of price with guest satisfaction, good satisfaction rate is found across all the prices. In some cities like lonon, we can see a group of reviews with low guest satisfaction.
+
+### Real Sum Vs Bedroom Count
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data, aes(x = realSum, fill = bedrooms, group = bedrooms)) + 
+  geom_histogram(alpha = 0.6) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = bedrooms, group = bedrooms)) + 
+  geom_histogram(alpha = 0.6) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14))
+
+ggplot(my_data_filtered, aes(x = realSum, fill = bedrooms, group = bedrooms)) + 
+  geom_histogram(alpha = 0.6) + 
+  theme(axis.title.x = element_text(size = 14),
+        axis.title.y = element_text(size = 14)) + facet_wrap(~city_day)
+
+```
+
+```{r, fig.height=10, fig.width=20}
+ggplot(my_data_filtered, aes(x = reorder(city_day, bedrooms, FUN=median), y = bedrooms, fill = city_day)) + 
+  geom_boxplot() +
+  coord_flip() + 
+  theme(legend.key.height = unit(0.5, "cm"),
+        legend.key.size = unit(1, "lines"))
+```
+
+```{r}
+cor(as.numeric(factor(my_data$multi)), as.numeric(factor(my_data$biz)))
+```
+
+
+## Non Outlier Analysis
+
+### Boxplot of Price Vs City
+
+```{r}
+ggplot(my_data_filtered, aes(x = reorder(city_day, realSum, FUN=median), y = realSum, fill = city_day)) + 
+  geom_boxplot() +
+  coord_flip() + 
+  theme(legend.key.height = unit(0.5, "cm"),
+        legend.key.size = unit(1, "lines"))
+
+```
+
+The highest prices in Europe are found in Amsterdam.
+
+### Density plot of Price vs Room type
+
+```{r}
+ggplot(my_data_filtered, aes(x = realSum, group=room_type, fill=room_type, alpha=0.2)) + 
+  geom_density() 
+```
+
+The prices of entire home are high comparatively
+
+### Scatterplot of Prices in Rome w.r.t Latitude and Longitude during weekdays
+
+```{r}
+tema <- theme(plot.title = element_text(size = 23, hjust = .5),
+              axis.text.x = element_text(size = 19, face = "bold"),
+              axis.text.y = element_text(size = 19, face = "bold"),
+              axis.title.x = element_text(size = 19),
+              axis.title.y = element_text(size = 19),
+              legend.text = element_text(colour="black", size=19, face="bold"),
+              legend.background = element_rect(fill="#F5FFFA", size=0.5, linetype="dashed", 
+                                  colour ="black"))
+
+rome_data <- my_data_filtered %>% subset(city_day=='rome_weekdays')
+  
+ggplot(data = rome_data, mapping = aes(x = lat, y = lng)) +
+    theme_minimal() +
+    scale_fill_identity() +
+    geom_point(mapping = aes(color = realSum), size = 3) +
+    ggtitle("") +
+    tema
+```
+
+This plot is within expectations of general trends, which suggests similar types of establishments (price and hospitality) tend be in clusters.
+
+
+# Different Model Selection and Training
+
+## Checking for correlations between different attributes
+
+```{r}
+ggpairs(my_data[c("realSum","dist","metro_dist"
+                  ,"attr_index_norm","rest_index_norm","city_day")], cardinality = 20, cardinality_threshold = 999)
+```
+
+```{r}
+ggpairs(my_data_filtered[c("realSum","dist","metro_dist"
+                  ,"attr_index_norm","rest_index_norm","city_day")], cardinality = 20, cardinality_threshold = 999)
+```
+
+
+```{r}
+cor(my_data$attr_index, my_data$rest_index)
+```
+
+```{r}
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = attr_index_norm, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = attr_index_norm, y = rest_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red"))
+
+ggplot() +
+  geom_point(data = my_data_filtered, aes(x = attr_index_norm, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  geom_point(data = my_outliers, aes(x = attr_index_norm, y = rest_index_norm, color = "Outliers"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue", "Outliers" = "red")) +
+  facet_wrap(~city_day)
+
+ggplot() +
+  geom_point(data = my_data, aes(x = attr_index_norm, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue"))
+
+ggplot() +
+  geom_point(data = my_data, aes(x = attr_index_norm, y = rest_index_norm, color = "Filtered Data"), alpha = 0.4) +
+  scale_color_manual(values = c("Filtered Data" = "blue")) +
+  facet_wrap(~city_day)
+```
+
+```{r}
+cor(my_data$attr_index_norm, my_data$rest_index_norm)
+```
+
+
+## Linear Regression
+
+```{r}
+M1 <- lm(realSum ~ . - realSum, data = my_data_train)
+summary(M1)
+```
+
+The r^2 and adjusted r^2 values are too low for the Linear regression model to be considered a competent one in this case.
+
+## Lasso Step Regression
+
+```{r}
+M1_step = step(M1, direction = "backward")
+```
+
+```{r}
+summary(M1_step)
+```
+
+The stepwise regression removed - host_is_superhost, rest_index_norm, dist
+
+```{r}
+lm_pred <- predict(M1_step, newdata = my_data_test)
+y_test<- my_data_test$realSum
+
+RMSE = sqrt(mean((y_test - lm_pred)^2))
+RMSE
+```
+
+```{r}
+# Prepare the predictors and response variable
+x_train <- model.matrix(realSum ~ room_type + person_capacity + host_is_superhost + multi + biz + cleanliness_rating + guest_satisfaction_overall
+                        + bedrooms + dist + metro_dist + attr_index_norm + rest_index_norm + lng + lat + city_day, data = my_data_train)[,-1]
+y_train <- my_data_train$realSum
+
+# Fit a Lasso regression model
+lasso_model <- glmnet(x_train, y_train, alpha = 1)
+
+# Select the best lambda value using cross-validation
+cv_model <- cv.glmnet(x_train, y_train, alpha = 1, nfolds = 5)
+
+# Plot the cross-validation results
+plot(cv_model)
+
+# Select the lambda value that minimizes the mean cross-validation error
+best_lambda <- cv_model$lambda.min
+
+# Fit a Lasso regression model with the selected lambda value
+lasso_model_best <- glmnet(x_train, y_train, alpha = 1, lambda = best_lambda)
+
+# Calculate R-squared and multiple R-squared
+y_train_pred <- predict(lasso_model_best, newx = x_train)
+y_train_mean <- mean(y_train)
+SST <- sum((y_train - y_train_mean)^2)
+SSR <- sum((y_train - y_train_pred)^2)
+R_squared <- 1 - SSR/SST
+multiple_R_squared <- cor(y_train_pred, y_train)^2
+n <- length(y_train)
+p <- ncol(x_train)
+adj_R_squared <- 1 - (SSR/(n - p - 1))/(SST/(n - 1))
+
+
+# Print the R-squared and multiple R-squared values
+cat("R-squared:", round(R_squared, 3), "\n")
+cat("Multiple R-squared:", round(multiple_R_squared, 3), "\n")
+cat("Adjusted R-squared:", round(adj_R_squared, 3), "\n")
+
+# Predict on the test data
+x_test <- model.matrix(realSum ~ room_type + person_capacity + host_is_superhost + multi + biz + cleanliness_rating + guest_satisfaction_overall
+                        + bedrooms + dist + metro_dist + attr_index_norm + rest_index_norm + lng + lat + city_day, data = my_data_test)[,-1]
+y_test <- my_data_test$realSum
+lasso_pred <- predict(lasso_model_best, newx = x_test)
+
+# Evaluate the model performance
+rmse <- sqrt(mean((y_test - lasso_pred)^2))
+cat("RMSE on test set:", round(rmse, 3), "\n")
+```
+
+
+
+```{r}
+# Prepare the predictors and response variable
+x_train <- model.matrix(realSum ~ room_type + person_capacity + host_is_superhost + multi + biz + cleanliness_rating + guest_satisfaction_overall
+                        + bedrooms + 
+                          poly(dist,2) + 
+                          poly(metro_dist,2) + 
+                          poly(attr_index_norm,2) + 
+                          poly(rest_index_norm,2) + lng + lat + 
+                          city_day, data = my_data_train)[,-1]
+y_train <- my_data_train$realSum
+
+# Fit a Lasso regression model
+lasso_model <- glmnet(x_train, y_train, alpha = 1)
+
+# Select the best lambda value using cross-validation
+cv_model <- cv.glmnet(x_train, y_train, alpha = 1, nfolds = 5)
+
+# Plot the cross-validation results
+plot(cv_model)
+
+# Select the lambda value that minimizes the mean cross-validation error
+best_lambda <- cv_model$lambda.min
+
+# Fit a Lasso regression model with the selected lambda value
+lasso_model_best <- glmnet(x_train, y_train, alpha = 1, lambda = best_lambda)
+
+# Calculate R-squared and multiple R-squared
+y_train_pred <- predict(lasso_model_best, newx = x_train)
+y_train_mean <- mean(y_train)
+SST <- sum((y_train - y_train_mean)^2)
+SSR <- sum((y_train - y_train_pred)^2)
+R_squared <- 1 - SSR/SST
+multiple_R_squared <- cor(y_train_pred, y_train)^2
+n <- length(y_train)
+p <- ncol(x_train)
+adj_R_squared <- 1 - (SSR/(n - p - 1))/(SST/(n - 1))
+
+
+# Print the R-squared and multiple R-squared values
+cat("R-squared:", round(R_squared, 3), "\n")
+cat("Multiple R-squared:", round(multiple_R_squared, 3), "\n")
+cat("Adjusted R-squared:", round(adj_R_squared, 3), "\n")
+
+# Predict on the test data
+x_test <- model.matrix(realSum ~ room_type + person_capacity + host_is_superhost + multi + biz + cleanliness_rating + guest_satisfaction_overall
+                        + bedrooms + 
+                          poly(dist,2) + 
+                          poly(metro_dist,2) + 
+                          poly(attr_index_norm,2) + 
+                          poly(rest_index_norm,2) + lng + lat + 
+                          city_day, data = my_data_test)[,-1]
+y_test <- my_data_test$realSum
+lasso_pred <- predict(lasso_model_best, newx = x_test)
+
+# Evaluate the model performance
+rmse <- sqrt(mean((y_test - lasso_pred)^2))
+# Print the R-squared and multiple R-squared values
+cat("RMSE on test set:", round(rmse, 3), "\n")
+
+```
+
+Even Lasso regression is not good because of extremely low value of R^2 even in polynominal model of power 2 and 3.
+
+# Conclusion at this Point in Time
+
+Even though EDA has given us good insights in price determinants, both Linear and Lasso Step Regression are not good for this case which is to be expected since all common data tends to be generally skewed Normal or Guassian(to be tested).
+
+Further modelling is required and will be conducted which includes trying of different linear techniques and also models from different family.

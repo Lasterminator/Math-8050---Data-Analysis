@@ -130,47 +130,430 @@
 \title{Project}
 \author{Trinath Sai Subhash Reddy Pittala, Uma Maheswara R Meleti,
 Hemanth Vasireddy}
-\date{2023-04-04}
+\date{2023-04-25}
 
 \begin{document}
 \maketitle
 
+\hypertarget{abstract}{%
+\section{Abstract}\label{abstract}}
+
+Airbnb has disrupted the hospitality industry by providing a platform
+for short-term rentals. Understanding the factors that determine Airbnb
+prices is essential for both hosts and guests. This report explores the
+determinants of Airbnb prices in Europe using data from the publicly
+available dataset `Airbnb Price Determinants' from
+\href{https://www.kaggle.com/datasets/thedevastator/airbnb-price-determinants-in-europe}{Kaggle}.
+In this study, we have explored linear and polynomial regression and
+random forest models to determine the price of a room and found the main
+determinants based on the coefficient values.
+
 \hypertarget{introduction}{%
 \section{Introduction}\label{introduction}}
 
-\hypertarget{airbnb-price-determinants-in-europe}{%
-\subsection{Airbnb Price Determinants in
-Europe}\label{airbnb-price-determinants-in-europe}}
-
-We want to work on Airbnb's dataset from kaggle.com. It provides
-information about hotel rooms in Europe.
-
-Each major city has its dataset for weekends and weekdays Variables
-included in the dataset: Host ID (Id) The total price of listing
-(realSum) Room type: private, shared, entire home, apt (room\_type)
-Whether or not a room is shared (room\_shared) Max number of people
-allowed in property (person\_capacity) Whether or not the host is
-superhost (host\_is\_superhost) Whether or not it is multiple rooms
-(multi) Whether for business or family use (biz) Distance from the city
-center (dist) Distance from nearest metro (metro\_dist) Latitude and
-longitude (lat long) Guest satisfaction (guest\_satisfaction\_overall)
-Cleanliness (cleanliness\_rating) The total quantity of bedrooms
-available among all properties for a single host (bedrooms)
-
-Questions we can answer with the dataset: Price Forecasting: use
-pricing, room type, and amenities to predict potential rental prices in
-the future. Hotspots: use listing location in relation to business and
-tourism centers and correlate this with pricing to determine where
-Airbnb rentals would be most profitable Customer Sentiment Analysis:
-analyze customer comments and satisfaction ratings to evaluate listing
-on overall customer experience and use it to optimize hosts' services to
-improve user satisfaction ratings.
+Airbnb has grown rapidly in Europe, providing a popular alternative to
+traditional hotels and accommodations. The platform enables hosts to
+rent out their homes or rooms to guests, often at lower prices than
+hotels. Airbnb offers guests the opportunity to experience local
+neighborhoods and culture more authentically. For hosts, Airbnb provides
+a source of income and an opportunity to meet people worldwide. However,
+Airbnb prices can vary widely, and understanding the factors determining
+these prices is important for hosts and guests.
 
 How can this information be used: Data can help travelers find
 accommodation that meets their needs without exceeding budget. Can help
 hosts set competitive pricing and optimize listings to get more
 bookings. Help investors evaluate the value of investing in real estate
 in different European cities based on pricing trends.
+
+\hypertarget{methods}{%
+\section{Methods}\label{methods}}
+
+To explore the determinants of Airbnb prices in Europe, we used data on
+Airbnb listings in ten major European cities (Amsterdam, Athens,
+Barcelona, Berlin, Budapest, Lisbon, London, Paris, Rome, Vienna). The
+data consists of various attributes about the hotel. We used regression
+analysis and random forest to determine the factors that are strongly
+associated with Airbnb prices in Europe.
+
+\hypertarget{exploratory-data-analysis}{%
+\subsection{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+
+We did EDA for the following variables
+
+\includegraphics{e.png}
+
+\[Figure 1\]
+
+The highest prices in Europe are found in Amsterdam.
+
+\includegraphics{f.png}
+
+\[Figure 2\]
+
+The prices of entire home are high comparatively
+
+\includegraphics{g.png}
+
+\[Figure 3\]
+
+In general the rooms that are closer to metro have comparatively higher
+prices. But, in Rome city the distance to metro is almost same for both
+categories of price.
+
+\includegraphics{h.png}
+
+\[Figure 4\]
+
+The attractive index of cities is varying across different cities it is
+higher for some cities like Paris.
+
+\includegraphics{i.png}
+
+\[Figure 5\]
+
+There are differences in room prices between both share and non-shared
+rooms.
+
+\hypertarget{pre-processing}{%
+\subsection{Pre Processing}\label{pre-processing}}
+
+The room\_shared and room\_private information is already embedded in
+room\_type. The variables are multi-collinear, so we have removed
+room\_shared and room\_private.
+
+\hypertarget{multivariate-linear-regression}{%
+\subsection{Multivariate linear
+regression}\label{multivariate-linear-regression}}
+
+Multivariate linear regression is a statistical method that models the
+relationship between multiple input variables and a continuous output
+variable. A linear equation is fitted to the input variables, with
+coefficients representing each input variable's contribution to the
+output variable. The model assumes that the relationship between the
+input and output variables is linear and that errors are normally
+distributed and independent.
+
+\hypertarget{polynomial-regression}{%
+\subsection{Polynomial regression}\label{polynomial-regression}}
+
+In polynomial regression, the input variables are raised to various
+powers. The degree of the polynomial determines the complexity of the
+model and the number of input variables used in the model. Polynomial
+regression is useful when the relationship between the input variables
+and the output variable is not linear and can provide a better fit to
+the data than linear regression.
+
+\hypertarget{interaction-variables}{%
+\subsection{Interaction Variables}\label{interaction-variables}}
+
+Interaction variables, also known as interaction effects, refer to the
+impact that the combination of two or more input variables has on the
+output variable in a regression model. They capture the non-additive
+relationship between input variables and can help to explain better the
+relationship between the input variables and the output variable. The
+interaction variables are created by multiplying the values of two or
+more input variables and including them as additional terms in the
+model. The coefficient of an interaction variable represents the change
+in the response variable for a one-unit change in one input variable
+while holding the other input variables constant.
+
+\hypertarget{random-forest-regression}{%
+\subsection{Random forest regression}\label{random-forest-regression}}
+
+Random forest regression is a machine learning technique that combines
+the power of decision trees with the concept of ensemble learning.
+
+Decision trees work by recursively partitioning the input data into
+subsets based on the values of the input features to minimize the
+variance of the target variable within each subgroup. The result is a
+tree-like structure representing a set of rules for predicting the
+target variable. Each internal node in the tree corresponds to a test on
+one of the input features, and each leaf node corresponds to a predicted
+target variable value. During the prediction phase, the input data is
+traversed down the tree according to the rules represented by the
+internal nodes until a leaf node is reached, which provides the
+predicted value for the target variable. Decision trees handle
+non-linear relationships between features and the target variable.
+However, it is prone to overfitting, especially when the tree is deep,
+and can be sensitive to small changes in the input data.
+
+In Random Forest, multiple decision trees are trained on different
+subsets of the input data, and the results are combined to make
+predictions. Each tree in the forest is trained on a random subset of
+the available features, which helps to reduce overfitting and increase
+the model's generalization performance. During the prediction phase, the
+output of each tree is aggregated to produce a final prediction.
+
+\hypertarget{data}{%
+\section{Data}\label{data}}
+
+Each major city has its own dataset for weekend and weekdays Variables
+included in data set:
+
+\begin{itemize}
+\tightlist
+\item
+  Host ID (Id)
+\item
+  Total price of listing (realSum)
+\item
+  Room type: private, shared, entire home, apt (room\_type)
+\item
+  Whether or not room is shared (room\_shared)
+\item
+  Max number of people allowed in property (person\_capacity)
+\item
+  Whether or not host is superbost (host\_is\_superhost)
+\item
+  Whether or not it is multiple rooms (multi)
+\item
+  Whether for business or family use (biz)
+\item
+  Distance from city center (dist)
+\item
+  Distance from nearest metro (metro\_dist)
+\item
+  Latitude and longitude (lat lng)
+\item
+  Guest satisfaction (guest\_satisfaction\_overall)
+\item
+  Cleanliness (cleanliness\_rating)
+\item
+  Total quantity of bedrooms available among all properties for single
+  host (bedrooms)
+\item
+  Index of Attractions near the hotel (attr\_index)
+\item
+  Normalized Index of Attractions near the hotel (attr\_index\_norm)
+\item
+  Index Restaurants near the hotel (rest\_index)
+\item
+  Normalized Index of Restaurants near the hotel (rest\_index\_norm)
+\end{itemize}
+
+The dataset consists of
+
+\begin{itemize}
+\tightlist
+\item
+  Continuous variables : realSum, dist, metro\_dist, lat, lng,
+  attr\_index, attr\_index\_norm, rest\_index, rest\_index\_norm
+\item
+  Ordinal : person\_capacity, guest\_satisfaction\_overall,
+  cleanliness\_rating, bedrooms
+\item
+  Nominal : room\_type, room\_shared, host\_is\_superhost, multi, biz
+\end{itemize}
+
+\hypertarget{results}{%
+\section{Results}\label{results}}
+
+We have modeled multivariate regression for each city, and below are the
+coefficients of each model arranged in descending order. The coefficient
+with a larger value is the essential determinant of the hotel room
+price.
+
+According to the table, all the models have the same descending order of
+coefficients. The order is as follows:
+
+1 - room\_type 2 - person\_capacity 3 - host\_is\_superhost 4 - multi 5
+- biz 6 - cleanliness\_rating 7 - guest\_satisfaction\_overall 8 -
+bedrooms 9 - dist 10 - metro\_dist 11 - attr\_index\_norm 12 -
+rest\_index\_norm, 13 - lng 14 - lat
+
+\hypertarget{modelling}{%
+\subsection{Modelling}\label{modelling}}
+
+\hypertarget{mvlr-seperated-by-city-and-day}{%
+\subsubsection{MVLR Seperated by City and
+Day}\label{mvlr-seperated-by-city-and-day}}
+
+\includegraphics{a.png}
+
+M\_0 - Amsterdam, M\_1 - Athens, M\_2 - Barcelona, M\_3 - Berlin, M\_4 -
+Budapest, M\_5 - Lisbon, M\_6 - London, M\_7 - Paris, M\_8 - Rome, M\_9
+- Vienna
+
+\hypertarget{mvlr-combined-of-all-cities}{%
+\subsubsection{MVLR Combined of all
+Cities}\label{mvlr-combined-of-all-cities}}
+
+\includegraphics{b.png}
+
+Apart from Cityday, below are the ranking of coefficients of the model
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Lat, 2. bedrooms, 3. biz, 4. person\_capacity, 5. Multi, 6.
+  Attr\_index\_norm, 7. Cleanliness\_rating, 8. host\_is\_superhost, 9.
+  guest\_satisfaction\_overall, 10. rest\_index\_norm 11. dist, 12.
+  metro\_dist, 13. room\_type, 14. lng
+\end{enumerate}
+
+The city day coefficients are almost ranked at the top.
+
+\hypertarget{other-models}{%
+\subsubsection{Other Models}\label{other-models}}
+
+\begin{longtable}[]{@{}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}
+  >{\raggedright\arraybackslash}p{(\columnwidth - 12\tabcolsep) * \real{0.1429}}@{}}
+\toprule()
+\begin{minipage}[b]{\linewidth}\raggedright
+Model
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Train \(R^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Train Adj \(R^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Train \(RMSE\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test \(R^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test Adj \(R^2\)
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
+Test \(RMSE\)
+\end{minipage} \\
+\midrule()
+\endhead
+MLR & 0.2150414 & 0.2146725 & 304.9175 & 0.33744 & 0.3371287 &
+233.2618 \\
+MLR with Step & 0.2149964 & 0.2146275 & 304.9262 & 0.3373441 & 0.3370327
+& 233.2787 \\
+MLR with IVs & 0.2159815 & 0.215613 & 304.7348 & 0.3379444 & 0.3376333 &
+233.173 \\
+MLR with IVs, Step & 0.2159435 & 0.215575 & 304.7422 & 0.3380392 &
+0.3377281 & 233.1563 \\
+Poly with Order 2 & 0.2154699 & 0.2151012 & 304.8342 & 0.3373538 &
+0.3370424 & 233.277 \\
+Poly with Order 2, Step & 0.2154289 & 0.2150602 & 304.8422 & 0.3373204 &
+0.337009 & 233.2829 \\
+Poly with Order 2, IVs & 0.22214 & 0.2217744 & 303.5356 & 0.334993 &
+0.3346805 & 233.6922 \\
+Poly with Order 2, IVs, Step & 0.2221344 & 0.2217689 & 303.5367 &
+0.3350694 & 0.3347569 & 233.6788 \\
+Poly with Order 3 & 0.2160624 & 0.215694 & 304.7191 & 0.3375855 &
+0.3372742 & 233.2362 \\
+Poly with Order 3, Step & 0.2160337 & 0.2156653 & 304.7247 & 0.3376519 &
+0.3373407 & 233.2245 \\
+Poly with Order 3, IVs & 0.2330663 & 0.2327059 & 301.3962 & 0.1901115 &
+0.189731 & 257.8955 \\
+Poly with Order 3, IVs, Step & 0.2285384 & 0.2281759 & 302.2846 &
+0.3281442 & 0.3281442 & 234.8925 \\
+Lasso With Order 1 & 0.215693 & 0.2147166 & 325.7776 & 0.3372306 &
+0.3353023 & 233.2987 \\
+Lasso With Order 2 & 0.2201963 & 0.217819 & 326.6683 & 0.1830879 &
+0.1772535 & 259.0113 \\
+Lasso With Order 3 & 0.2228371 & 0.2166688 & 326.2303 & 0.02854527 &
+0.01036279 & 282.4505 \\
+Random Forest & 0.8747755 & 0.8724317 & 121.7878 & 0.7588743 & 0.7543612
+& 140.719 \\
+\bottomrule()
+\end{longtable}
+
+* IVs here is Interaction variables
+
+\hypertarget{random-forest}{%
+\subsubsection{Random Forest}\label{random-forest}}
+
+We have trained Random Forest on all cities' combined data, and below
+are the important variables.
+
+\begin{longtable}[]{@{}ll@{}}
+\toprule()
+& IncNodePurity \\
+\midrule()
+\endhead
+room\_type & 122087850 \\
+host\_is\_superhost & 26594131 \\
+multi & 21575815 \\
+biz & 24190212 \\
+city\_day & 114299029 \\
+person\_capacity & 183757090 \\
+cleanliness\_rating & 79985960 \\
+guest\_satisfaction\_overall & 162106050 \\
+bedrooms & 342017315 \\
+dist & 423128244 \\
+metro\_dist & 248206656 \\
+attr\_index\_norm & 662153431 \\
+rest\_index\_norm & 435838043 \\
+lng & 482308349 \\
+lat & 588248566 \\
+\bottomrule()
+\end{longtable}
+
+\includegraphics{c.png}
+
+The random forest model has chosen the attraction index as the most
+important variable, which makes more sense from a general point of view
+because the places with more attractions would attribute to pricing
+differences. The other variables ranking also seems consistent with
+common sense, such as latitude and longitude, which indicates location
+and distance from the city center, etc.
+
+Overall the random forest has performed better than the other models
+with a Adjusted. \(R^2\) value of 0.7543 and RMSE of 140.719 compared to
+the best regression model, which has Adjusted \(R^2\) value of 0.3377
+and RMSE of 233.1563 on the test set.
+
+\hypertarget{discussion}{%
+\section{Discussion}\label{discussion}}
+
+When we applied separate models for each city data, on linear
+regression, latitude was least ranked, but when we combined all the data
+latitude is on top rank next to city day, it indicates the information
+about location is being captured by the latitude when all data is
+combined, in separate models all the data about city represents it
+location so latitude is least ranked.
+
+The attraction index is ranked higher in all cities combined model than
+separated models. (From \(Figure\) \(4\))
+
+The host\_is\_super host is ranked high in individual models than
+combined model, but its significance value is very low.
+
+Room Type is ranked at the top in separate models, but in the combined
+model is at quite a low rank. It is due to the information of Room Type
+capturing the information about the location; it can be inferred from
+the graph \(Figure\) \(5\)
+
+\hypertarget{summary}{%
+\section{Summary}\label{summary}}
+
+This report investigates the factors that determine Airbnb room prices
+in Europe using data from the publicly available dataset `Airbnb Price
+Determinants.' To identify the main determinants of Airbnb room prices
+in Europe, the report employed a regression analysis and random forest
+model. The dataset was collected from ten major European cities,
+including Amsterdam, Athens, Barcelona, Berlin, Budapest, Lisbon,
+London, Paris, Rome, and Vienna. Exploratory data analysis was conducted
+on various attributes of the data. The report discovered that Amsterdam
+has the highest Airbnb room prices in Europe. In general, entire homes
+have higher prices compared to shared rooms. The proximity of a room to
+a metro station was found to be correlated with higher prices. However,
+in Rome, the distance to the metro station has a negligible impact on
+room prices. The study also discovered that there are differences in
+room prices between shared and non-shared rooms. Furthermore, the study
+used multivariate linear regression, polynomial regression, interaction
+variables, and random forest regression to identify the factors that are
+strongly associated with Airbnb prices in Europe. The report
+demonstrates that the main determinants of Airbnb room prices in Europe
+include the number of people allowed in a room, the room type, and the
+host's superhost status. The report provides valuable insights for
+Airbnb guests, hosts, and investors in evaluating the value of investing
+in real estate in different European cities based on pricing trends.
+
+\hypertarget{appendix-for-code-and-detailed-analysis}{%
+\section{Appendix for Code and Detailed
+Analysis}\label{appendix-for-code-and-detailed-analysis}}
 
 \hypertarget{pre-processing-and-cleaning-the-data}{%
 \section{Pre Processing and Cleaning the
@@ -222,37 +605,6 @@ Files}\label{combining-the-data-from-all-files}}
 \FunctionTok{head}\NormalTok{(my\_data)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-##   X  realSum    room_type room_shared room_private person_capacity
-## 1 0 194.0337 Private room       False         True               2
-## 2 1 344.2458 Private room       False         True               4
-## 3 2 264.1014 Private room       False         True               2
-## 4 3 433.5294 Private room       False         True               4
-## 5 4 485.5529 Private room       False         True               2
-## 6 5 552.8086 Private room       False         True               3
-##   host_is_superhost multi biz cleanliness_rating guest_satisfaction_overall
-## 1             False     1   0                 10                         93
-## 2             False     0   0                  8                         85
-## 3             False     0   1                  9                         87
-## 4             False     0   1                  9                         90
-## 5              True     0   0                 10                         98
-## 6             False     0   0                  8                        100
-##   bedrooms      dist metro_dist attr_index attr_index_norm rest_index
-## 1        1 5.0229638  2.5393800   78.69038        4.166708   98.25390
-## 2        1 0.4883893  0.2394039  631.17638       33.421209  837.28076
-## 3        1 5.7483119  3.6516213   75.27588        3.985908   95.38695
-## 4        2 0.3848620  0.4398761  493.27253       26.119108  875.03310
-## 5        1 0.5447382  0.3186926  552.83032       29.272733  815.30574
-## 6        2 2.1314201  1.9046682  174.78896        9.255191  225.20166
-##   rest_index_norm     lng      lat           city_day
-## 1        6.846473 4.90569 52.41772 amsterdam_weekdays
-## 2       58.342928 4.90005 52.37432 amsterdam_weekdays
-## 3        6.646700 4.97512 52.36103 amsterdam_weekdays
-## 4       60.973565 4.89417 52.37663 amsterdam_weekdays
-## 5       56.811677 4.90051 52.37508 amsterdam_weekdays
-## 6       15.692376 4.87699 52.38966 amsterdam_weekdays
-\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -391,30 +743,6 @@ removing attr\_index and rest\_index
 \FunctionTok{head}\NormalTok{(my\_data)}
 \end{Highlighting}
 \end{Shaded}
-
-\begin{verbatim}
-##   X  realSum    room_type person_capacity host_is_superhost multi biz
-## 1 0 194.0337 Private room               2             False     1   0
-## 2 1 344.2458 Private room               4             False     0   0
-## 3 2 264.1014 Private room               2             False     0   1
-## 4 3 433.5294 Private room               4             False     0   1
-## 5 4 485.5529 Private room               2              True     0   0
-## 6 5 552.8086 Private room               3             False     0   0
-##   cleanliness_rating guest_satisfaction_overall bedrooms      dist metro_dist
-## 1                 10                         93        1 5.0229638  2.5393800
-## 2                  8                         85        1 0.4883893  0.2394039
-## 3                  9                         87        1 5.7483119  3.6516213
-## 4                  9                         90        2 0.3848620  0.4398761
-## 5                 10                         98        1 0.5447382  0.3186926
-## 6                  8                        100        2 2.1314201  1.9046682
-##   attr_index_norm rest_index_norm     lng      lat           city_day
-## 1        4.166708        6.846473 4.90569 52.41772 amsterdam_weekdays
-## 2       33.421209       58.342928 4.90005 52.37432 amsterdam_weekdays
-## 3        3.985908        6.646700 4.97512 52.36103 amsterdam_weekdays
-## 4       26.119108       60.973565 4.89417 52.37663 amsterdam_weekdays
-## 5       29.272733       56.811677 4.90051 52.37508 amsterdam_weekdays
-## 6        9.255191       15.692376 4.87699 52.38966 amsterdam_weekdays
-\end{verbatim}
 
 \hypertarget{outliers-using-iqr-range}{%
 \subsection{Outliers using IQR Range}\label{outliers-using-iqr-range}}
@@ -667,8 +995,8 @@ Data}\label{spilt-training-and-testing-data}}
 ## [1] 15513    17
 \end{verbatim}
 
-\hypertarget{exploratory-data-analysis}{%
-\section{Exploratory Data Analysis}\label{exploratory-data-analysis}}
+\hypertarget{exploratory-data-analysis-1}{%
+\section{Exploratory Data Analysis}\label{exploratory-data-analysis-1}}
 
 \hypertarget{outlier-analysis}{%
 \subsection{Outlier Analysis}\label{outlier-analysis}}
@@ -701,8 +1029,9 @@ Here outlier data represents the hotel rooms with high prices.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-14-2.png} In
-general the rooms that are closer to metro have comparatively higher
+\includegraphics{Project_files/figure-latex/unnamed-chunk-14-2.png}
+
+In general the rooms that are closer to metro have comparatively higher
 prices. But, in Rome city the distance to metro is almost same for both
 categories of price.
 
@@ -730,8 +1059,9 @@ categories of price.
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-15-2.png} In
-general the pricey rooms are near to the centre of the city.
+\includegraphics{Project_files/figure-latex/unnamed-chunk-15-2.png}
+
+In general the pricey rooms are near to the centre of the city.
 
 \hypertarget{real-sum-vs-attraction-index-normal}{%
 \subsubsection{Real Sum vs Attraction Index
@@ -1053,7 +1383,7 @@ city}\label{scatterplot-of-price-vs-guest-satisfaction-filtered-by-city}}
 
 The plot depicts that there is no correlation of price with guest
 satisfaction, good satisfaction rate is found across all the prices. In
-some cities like lonon, we can see a group of reviews with low guest
+some cities like london, we can see a group of reviews with low guest
 satisfaction.
 
 \hypertarget{real-sum-vs-bedroom-count}{%
@@ -1175,6 +1505,56 @@ This plot is within expectations of general trends, which suggests
 similar types of establishments (price and hospitality) tend be in
 clusters.
 
+\hypertarget{attraction-index-in-all-cities}{%
+\subsubsection{Attraction Index in all
+Cities}\label{attraction-index-in-all-cities}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# create a new column that groups the cities}
+\NormalTok{my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_group }\OtherTok{\textless{}{-}} \FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%}
+    \FunctionTok{c}\NormalTok{(}\StringTok{"amsterdam\_weekdays"}\NormalTok{, }\StringTok{"amsterdam\_weekends"}\NormalTok{), }\StringTok{"amsterdam"}\NormalTok{,}
+    \FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"athens\_weekdays"}\NormalTok{,}
+        \StringTok{"athens\_weekends"}\NormalTok{), }\StringTok{"athens"}\NormalTok{, }\FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%}
+        \FunctionTok{c}\NormalTok{(}\StringTok{"barcelona\_weekdays"}\NormalTok{, }\StringTok{"barcelona\_weekends"}\NormalTok{), }\StringTok{"barcelona"}\NormalTok{,}
+        \FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"berlin\_weekdays"}\NormalTok{,}
+            \StringTok{"berlin\_weekends"}\NormalTok{), }\StringTok{"berlin"}\NormalTok{, }\FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%}
+            \FunctionTok{c}\NormalTok{(}\StringTok{"budapest\_weekdays"}\NormalTok{, }\StringTok{"budapest\_weekends"}\NormalTok{), }\StringTok{"budapest"}\NormalTok{,}
+            \FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"lisbon\_weekdays"}\NormalTok{,}
+                \StringTok{"lisbon\_weekends"}\NormalTok{), }\StringTok{"lisbon"}\NormalTok{, }\FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%}
+                \FunctionTok{c}\NormalTok{(}\StringTok{"london\_weekdays"}\NormalTok{, }\StringTok{"london\_weekends"}\NormalTok{), }\StringTok{"london"}\NormalTok{,}
+                \FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%} \FunctionTok{c}\NormalTok{(}\StringTok{"paris\_weekdays"}\NormalTok{,}
+                  \StringTok{"paris\_weekends"}\NormalTok{), }\StringTok{"paris"}\NormalTok{, }\FunctionTok{ifelse}\NormalTok{(my\_data\_filtered}\SpecialCharTok{$}\NormalTok{city\_day }\SpecialCharTok{\%in\%}
+                  \FunctionTok{c}\NormalTok{(}\StringTok{"rome\_weekdays"}\NormalTok{, }\StringTok{"rome\_weekends"}\NormalTok{), }\StringTok{"rome"}\NormalTok{,}
+                  \StringTok{"vienna"}\NormalTok{)))))))))}
+
+\CommentTok{\# plot the density plot with the new groupings}
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ attr\_index\_norm, }\AttributeTok{fill =}\NormalTok{ city\_group,}
+    \AttributeTok{alpha =} \FloatTok{0.2}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{geom\_density}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\AttributeTok{amsterdam =} \StringTok{"red"}\NormalTok{,}
+    \AttributeTok{athens =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{barcelona =} \StringTok{"green"}\NormalTok{, }\AttributeTok{berlin =} \StringTok{"orange"}\NormalTok{,}
+    \AttributeTok{budapest =} \StringTok{"purple"}\NormalTok{, }\AttributeTok{lisbon =} \StringTok{"black"}\NormalTok{, }\AttributeTok{london =} \StringTok{"brown"}\NormalTok{,}
+    \AttributeTok{paris =} \StringTok{"grey"}\NormalTok{, }\AttributeTok{rome =} \StringTok{"pink"}\NormalTok{, }\AttributeTok{vienna =} \StringTok{"yellow"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"City Group"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-31-1.png}
+
+\hypertarget{real-sum-vs-room-shared-for-all-cities}{%
+\subsection{Real Sum vs Room Shared for all
+Cities}\label{real-sum-vs-room-shared-for-all-cities}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{ggplot}\NormalTok{(my\_data\_filtered, }\FunctionTok{aes}\NormalTok{(}\AttributeTok{x =}\NormalTok{ room\_shared, }\AttributeTok{y =}\NormalTok{ realSum, }\AttributeTok{color =}\NormalTok{ city\_group),}
+    \AttributeTok{alpha =} \FloatTok{0.001}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{geom\_point}\NormalTok{() }\SpecialCharTok{+} \FunctionTok{scale\_fill\_manual}\NormalTok{(}\AttributeTok{values =} \FunctionTok{c}\NormalTok{(}\AttributeTok{amsterdam =} \StringTok{"red"}\NormalTok{,}
+    \AttributeTok{athens =} \StringTok{"blue"}\NormalTok{, }\AttributeTok{barcelona =} \StringTok{"green"}\NormalTok{, }\AttributeTok{berlin =} \StringTok{"orange"}\NormalTok{,}
+    \AttributeTok{budapest =} \StringTok{"purple"}\NormalTok{, }\AttributeTok{lisbon =} \StringTok{"black"}\NormalTok{, }\AttributeTok{london =} \StringTok{"brown"}\NormalTok{,}
+    \AttributeTok{paris =} \StringTok{"grey"}\NormalTok{, }\AttributeTok{rome =} \StringTok{"pink"}\NormalTok{, }\AttributeTok{vienna =} \StringTok{"yellow"}\NormalTok{)) }\SpecialCharTok{+} \FunctionTok{labs}\NormalTok{(}\AttributeTok{fill =} \StringTok{"City Group"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-32-1.png}
+
 \hypertarget{different-model-selection-and-training}{%
 \section{Different Model Selection and
 Training}\label{different-model-selection-and-training}}
@@ -1190,7 +1570,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-31-1.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-33-1.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1199,7 +1579,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-32-1.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-34-1.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1221,7 +1601,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-34-1.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-36-1.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1233,7 +1613,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-34-2.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-36-2.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1243,7 +1623,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-34-3.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-36-3.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1254,7 +1634,7 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-34-4.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-36-4.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1266,12 +1646,100 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 ## [1] 0.4721427
 \end{verbatim}
 
-\hypertarget{linear-regression}{%
-\subsection{Linear Regression}\label{linear-regression}}
+\hypertarget{linear-polynomial-and-step-regression}{%
+\subsection{Linear, Polynomial and Step
+Regression}\label{linear-polynomial-and-step-regression}}
+
+\hypertarget{mlr-seperated-by-city-day}{%
+\subsubsection{MLR Seperated by City
+Day}\label{mlr-seperated-by-city-day}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{M1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"amsterdam\_weekends"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"amsterdam\_weekdays"}\NormalTok{)}
+
+\NormalTok{M\_0 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"athens\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"athens\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"barcelona\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"barcelona\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"berlin\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"berlin\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"budapest\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"budapest\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_4 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"lisbon\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"lisbon\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_5 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"london\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"london\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_6 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"paris\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"paris\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_7 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"rome\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"rome\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_8 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\NormalTok{temp\_data }\OtherTok{\textless{}{-}} \FunctionTok{subset}\NormalTok{(my\_data\_train, city\_day }\SpecialCharTok{==} \StringTok{"vienna\_weekdays"} \SpecialCharTok{|}
+\NormalTok{    city\_day }\SpecialCharTok{==} \StringTok{"vienna\_weekends"}\NormalTok{, )}
+
+\NormalTok{M\_9 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X }\SpecialCharTok{{-}}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ temp\_data)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_0)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_1)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_2)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_3)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_4)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_5)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_6)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_7)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_8)}
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\NormalTok{coefs }\OtherTok{\textless{}{-}} \FunctionTok{tidy}\NormalTok{(M\_9)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{coefs[}\FunctionTok{order}\NormalTok{(coefs}\SpecialCharTok{$}\NormalTok{estimate, }\AttributeTok{decreasing =} \ConstantTok{TRUE}\NormalTok{), ]}
+\end{Highlighting}
+\end{Shaded}
+
+\hypertarget{mlr}{%
+\subsubsection{MLR}\label{mlr}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M1 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ . }\SpecialCharTok{{-}}\NormalTok{ realSum }\SpecialCharTok{{-}}\NormalTok{ X, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
 \FunctionTok{summary}\NormalTok{(M1)}
 \end{Highlighting}
 \end{Shaded}
@@ -1279,63 +1747,152 @@ attributes}\label{checking-for-correlations-between-different-attributes}}
 \begin{verbatim}
 ## 
 ## Call:
-## lm(formula = realSum ~ . - realSum, data = my_data_train)
+## lm(formula = realSum ~ . - realSum - X, data = my_data_train)
 ## 
 ## Residuals:
 ##     Min      1Q  Median      3Q     Max 
-##  -757.5   -84.1   -21.0    43.0 18422.1 
+##  -758.3   -84.0   -21.0    42.9 18422.4 
 ## 
 ## Coefficients:
 ##                              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)                -4.916e+03  3.997e+03  -1.230 0.218657    
-## X                           1.026e-03  1.605e-03   0.639 0.522652    
-## room_typePrivate room      -1.144e+02  4.282e+00 -26.703  < 2e-16 ***
-## room_typeShared room       -2.043e+02  1.894e+01 -10.790  < 2e-16 ***
-## person_capacity             2.396e+01  1.765e+00  13.578  < 2e-16 ***
-## host_is_superhostTrue       1.152e+00  3.936e+00   0.293 0.769759    
-## multi                       9.638e+00  4.133e+00   2.332 0.019704 *  
-## biz                         3.332e+01  4.189e+00   7.954 1.85e-15 ***
-## cleanliness_rating          5.045e+00  2.415e+00   2.089 0.036740 *  
-## guest_satisfaction_overall  7.759e-01  2.615e-01   2.968 0.003003 ** 
-## bedrooms                    8.599e+01  3.189e+00  26.965  < 2e-16 ***
-## dist                       -1.538e+00  1.263e+00  -1.218 0.223192    
-## metro_dist                 -3.879e+00  2.509e+00  -1.546 0.122147    
-## attr_index_norm             6.375e+00  2.946e-01  21.636  < 2e-16 ***
-## rest_index_norm            -1.736e-01  1.781e-01  -0.975 0.329728    
-## lng                        -2.619e+02  4.023e+01  -6.510 7.63e-11 ***
-## lat                         1.224e+02  7.653e+01   1.599 0.109884    
-## city_dayamsterdam_weekends  6.796e+01  1.600e+01   4.247 2.17e-05 ***
-## city_dayathens_weekdays     6.283e+03  1.389e+03   4.522 6.15e-06 ***
-## city_dayathens_weekends     6.271e+03  1.390e+03   4.513 6.41e-06 ***
-## city_daybarcelona_weekdays  4.051e+02  8.379e+02   0.483 0.628751    
-## city_daybarcelona_weekends  4.231e+02  8.379e+02   0.505 0.613579    
-## city_dayberlin_weekdays     1.940e+03  3.424e+02   5.666 1.47e-08 ***
-## city_dayberlin_weekends     1.950e+03  3.423e+02   5.697 1.23e-08 ***
-## city_daybudapest_weekdays   3.883e+03  7.075e+02   5.488 4.09e-08 ***
-## city_daybudapest_weekends   3.910e+03  7.075e+02   5.527 3.28e-08 ***
-## city_daylisbon_weekdays    -2.311e+03  1.144e+03  -2.020 0.043372 *  
-## city_daylisbon_weekends    -2.302e+03  1.144e+03  -2.013 0.044164 *  
-## city_daylondon_weekdays    -1.407e+03  2.062e+02  -6.823 9.06e-12 ***
-## city_daylondon_weekends    -1.409e+03  2.062e+02  -6.833 8.47e-12 ***
-## city_dayparis_weekdays     -4.046e+02  2.785e+02  -1.453 0.146310    
-## city_dayparis_weekends     -4.238e+02  2.787e+02  -1.521 0.128294    
-## city_dayrome_weekdays       2.929e+03  8.819e+02   3.322 0.000896 ***
-## city_dayrome_weekends       2.934e+03  8.819e+02   3.327 0.000879 ***
-## city_dayvienna_weekdays     3.216e+03  5.832e+02   5.515 3.51e-08 ***
-## city_dayvienna_weekends     3.215e+03  5.833e+02   5.511 3.59e-08 ***
+## (Intercept)                -4954.9076  3996.1824  -1.240 0.215017    
+## room_typePrivate room       -114.3655     4.2823 -26.707  < 2e-16 ***
+## room_typeShared room        -204.1842    18.9348 -10.784  < 2e-16 ***
+## person_capacity               23.9626     1.7645  13.581  < 2e-16 ***
+## host_is_superhostTrue          1.0749     3.9344   0.273 0.784700    
+## multi                          9.6004     4.1324   2.323 0.020173 *  
+## biz                           33.2806     4.1885   7.946 1.99e-15 ***
+## cleanliness_rating             5.0383     2.4153   2.086 0.036987 *  
+## guest_satisfaction_overall     0.7760     0.2615   2.968 0.002999 ** 
+## bedrooms                      86.0154     3.1888  26.974  < 2e-16 ***
+## dist                          -1.5330     1.2628  -1.214 0.224761    
+## metro_dist                    -3.9967     2.5025  -1.597 0.110262    
+## attr_index_norm                6.3705     0.2946  21.627  < 2e-16 ***
+## rest_index_norm               -0.1837     0.1774  -1.036 0.300215    
+## lng                         -262.8909    40.1931  -6.541 6.20e-11 ***
+## lat                          123.2117    76.5228   1.610 0.107378    
+## city_dayamsterdam_weekends    67.9410    16.0017   4.246 2.18e-05 ***
+## city_dayathens_weekdays     6315.0906  1388.5351   4.548 5.43e-06 ***
+## city_dayathens_weekends     6303.5311  1388.6527   4.539 5.66e-06 ***
+## city_daybarcelona_weekdays   411.7717   837.7909   0.491 0.623078    
+## city_daybarcelona_weekends   429.6529   837.8109   0.513 0.608075    
+## city_dayberlin_weekdays     1949.0424   342.1245   5.697 1.23e-08 ***
+## city_dayberlin_weekends     1958.8844   342.0401   5.727 1.03e-08 ***
+## city_daybudapest_weekdays   3902.3511   706.8806   5.521 3.40e-08 ***
+## city_daybudapest_weekends   3929.6734   706.8440   5.559 2.73e-08 ***
+## city_daylisbon_weekdays    -2312.9309  1143.8977  -2.022 0.043186 *  
+## city_daylisbon_weekends    -2304.0067  1143.8126  -2.014 0.043983 *  
+## city_daylondon_weekdays    -1409.2997   206.1046  -6.838 8.17e-12 ***
+## city_daylondon_weekends    -1410.9328   206.1223  -6.845 7.76e-12 ***
+## city_dayparis_weekdays      -403.0289   278.4819  -1.447 0.147840    
+## city_dayparis_weekends      -422.1389   278.6437  -1.515 0.129787    
+## city_dayrome_weekdays       2947.6852   881.3984   3.344 0.000826 ***
+## city_dayrome_weekends       2952.5352   881.4297   3.350 0.000810 ***
+## city_dayvienna_weekdays     3231.8185   582.7092   5.546 2.94e-08 ***
+## city_dayvienna_weekends     3230.2680   582.7972   5.543 3.00e-08 ***
 ## ---
 ## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
-## Residual standard error: 305.1 on 36158 degrees of freedom
-## Multiple R-squared:  0.2151, Adjusted R-squared:  0.2143 
-## F-statistic:   283 on 35 and 36158 DF,  p-value: < 2.2e-16
+## Residual standard error: 305.1 on 36159 degrees of freedom
+## Multiple R-squared:  0.215,  Adjusted R-squared:  0.2143 
+## F-statistic: 291.3 on 34 and 36159 DF,  p-value: < 2.2e-16
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Create summary table with coefficients and p{-}values}
+\NormalTok{table }\OtherTok{\textless{}{-}} \FunctionTok{summary}\NormalTok{(M1)}\SpecialCharTok{$}\NormalTok{coefficients[, }\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{)]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2150414
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2146725
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.9175
 \end{verbatim}
 
 The r\^{}2 and adjusted r\^{}2 values are too low for the Linear
 regression model to be considered a competent one in this case.
 
-\hypertarget{lasso-step-regression}{%
-\subsection{Lasso Step Regression}\label{lasso-step-regression}}
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.33744
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3367131
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.2618
+\end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1343,203 +1900,1129 @@ regression model to be considered a competent one in this case.
 \end{Highlighting}
 \end{Shaded}
 
-\begin{verbatim}
-## Start:  AIC=414133.9
-## realSum ~ (X + room_type + person_capacity + host_is_superhost + 
-##     multi + biz + cleanliness_rating + guest_satisfaction_overall + 
-##     bedrooms + dist + metro_dist + attr_index_norm + rest_index_norm + 
-##     lng + lat + city_day) - realSum
-## 
-##                              Df Sum of Sq        RSS    AIC
-## - host_is_superhost           1      7973 3365094746 414132
-## - X                           1     38033 3365124806 414132
-## - rest_index_norm             1     88412 3365175185 414133
-## - dist                        1    138090 3365224863 414133
-## <none>                                    3365086773 414134
-## - metro_dist                  1    222399 3365309172 414134
-## - lat                         1    237878 3365324651 414134
-## - cleanliness_rating          1    406023 3365492796 414136
-## - multi                       1    506134 3365592907 414137
-## - guest_satisfaction_overall  1    819629 3365906402 414141
-## - lng                         1   3943764 3369030537 414174
-## - biz                         1   5888249 3370975022 414195
-## - person_capacity             1  17158129 3382244902 414316
-## - attr_index_norm             1  43565736 3408652509 414598
-## - bedrooms                    1  67668883 3432755656 414853
-## - room_type                   2  74087785 3439174558 414918
-## - city_day                   19 129073720 3494160493 415458
-## 
-## Step:  AIC=414132
-## realSum ~ X + room_type + person_capacity + multi + biz + cleanliness_rating + 
-##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
-##     attr_index_norm + rest_index_norm + lng + lat + city_day
-## 
-##                              Df Sum of Sq        RSS    AIC
-## - X                           1     37006 3365131752 414130
-## - rest_index_norm             1     87739 3365182485 414131
-## - dist                        1    137403 3365232149 414131
-## <none>                                    3365094746 414132
-## - metro_dist                  1    224011 3365318757 414132
-## - lat                         1    236846 3365331592 414133
-## - cleanliness_rating          1    422853 3365517599 414135
-## - multi                       1    513494 3365608240 414136
-## - guest_satisfaction_overall  1    846062 3365940808 414139
-## - lng                         1   3943452 3369038198 414172
-## - biz                         1   5880284 3370975030 414193
-## - person_capacity             1  17156242 3382250987 414314
-## - attr_index_norm             1  43564593 3408659339 414596
-## - bedrooms                    1  67662885 3432757630 414851
-## - room_type                   2  74127027 3439221773 414917
-## - city_day                   19 129091002 3494185748 415457
-## 
-## Step:  AIC=414130.4
-## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
-##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
-##     attr_index_norm + rest_index_norm + lng + lat + city_day
-## 
-##                              Df Sum of Sq        RSS    AIC
-## - rest_index_norm             1     99078 3365230830 414129
-## - dist                        1    136528 3365268280 414130
-## <none>                                    3365131752 414130
-## - metro_dist                  1    238734 3365370486 414131
-## - lat                         1    240263 3365372016 414131
-## - cleanliness_rating          1    420972 3365552724 414133
-## - multi                       1    509297 3365641049 414134
-## - guest_satisfaction_overall  1    845143 3365976896 414138
-## - lng                         1   3980694 3369112446 414171
-## - biz                         1   5868776 3371000528 414191
-## - person_capacity             1  17162129 3382293881 414313
-## - attr_index_norm             1  43529070 3408660822 414594
-## - bedrooms                    1  67709766 3432841518 414849
-## - room_type                   2  74127155 3439258907 414915
-## - city_day                   19 130900670 3496032422 415474
-## 
-## Step:  AIC=414129.5
-## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
-##     guest_satisfaction_overall + bedrooms + dist + metro_dist + 
-##     attr_index_norm + lng + lat + city_day
-## 
-##                              Df Sum of Sq        RSS    AIC
-## - dist                        1     86683 3365317513 414128
-## <none>                                    3365230830 414129
-## - metro_dist                  1    272120 3365502950 414130
-## - lat                         1    273162 3365503992 414130
-## - cleanliness_rating          1    419524 3365650354 414132
-## - multi                       1    494022 3365724852 414133
-## - guest_satisfaction_overall  1    837305 3366068136 414136
-## - lng                         1   3973420 3369204250 414170
-## - biz                         1   5789568 3371020398 414190
-## - person_capacity             1  17121733 3382352564 414311
-## - attr_index_norm             1  54609498 3419840328 414710
-## - bedrooms                    1  67904086 3433134916 414851
-## - room_type                   2  74039649 3439270479 414913
-## - city_day                   19 131071208 3496302038 415474
-## 
-## Step:  AIC=414128.4
-## realSum ~ room_type + person_capacity + multi + biz + cleanliness_rating + 
-##     guest_satisfaction_overall + bedrooms + metro_dist + attr_index_norm + 
-##     lng + lat + city_day
-## 
-##                              Df Sum of Sq        RSS    AIC
-## <none>                                    3365317513 414128
-## - lat                         1    292396 3365609909 414130
-## - cleanliness_rating          1    414092 3365731605 414131
-## - multi                       1    495582 3365813095 414132
-## - metro_dist                  1    614735 3365932248 414133
-## - guest_satisfaction_overall  1    838098 3366155612 414135
-## - lng                         1   3887405 3369204918 414168
-## - biz                         1   5842686 3371160199 414189
-## - person_capacity             1  17112579 3382430092 414310
-## - bedrooms                    1  67830738 3433148251 414849
-## - room_type                   2  74300129 3439617642 414915
-## - attr_index_norm             1  86947824 3452265337 415050
-## - city_day                   19 133905560 3499223073 415503
-\end{verbatim}
-
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{summary}\NormalTok{(M1\_step)}
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1\_step, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## 
-## Call:
-## lm(formula = realSum ~ room_type + person_capacity + multi + 
-##     biz + cleanliness_rating + guest_satisfaction_overall + bedrooms + 
-##     metro_dist + attr_index_norm + lng + lat + city_day, data = my_data_train)
-## 
-## Residuals:
-##     Min      1Q  Median      3Q     Max 
-##  -756.8   -84.1   -21.0    42.9 18422.9 
-## 
-## Coefficients:
-##                              Estimate Std. Error t value Pr(>|t|)    
-## (Intercept)                -5594.6616  3968.4120  -1.410 0.158608    
-## room_typePrivate room       -114.3509     4.2751 -26.748  < 2e-16 ***
-## room_typeShared room        -203.5745    18.9242 -10.757  < 2e-16 ***
-## person_capacity               23.9228     1.7642  13.560  < 2e-16 ***
-## multi                          9.5185     4.1248   2.308 0.021024 *  
-## biz                           33.0599     4.1724   7.924 2.37e-15 ***
-## cleanliness_rating             5.0657     2.4015   2.109 0.034916 *  
-## guest_satisfaction_overall     0.7802     0.2600   3.001 0.002693 ** 
-## bedrooms                      86.0342     3.1867  26.998  < 2e-16 ***
-## metro_dist                    -5.4925     2.1370  -2.570 0.010170 *  
-## attr_index_norm                6.3667     0.2083  30.566  < 2e-16 ***
-## lng                         -257.3918    39.8246  -6.463 1.04e-10 ***
-## lat                          134.7768    76.0355   1.773 0.076312 .  
-## city_dayamsterdam_weekends    67.1363    15.9781   4.202 2.65e-05 ***
-## city_dayathens_weekdays     6380.0626  1384.2639   4.609 4.06e-06 ***
-## city_dayathens_weekends     6370.9186  1384.2104   4.603 4.19e-06 ***
-## city_daybarcelona_weekdays   554.5173   831.2840   0.667 0.504737    
-## city_daybarcelona_weekends   572.4049   831.2994   0.689 0.491101    
-## city_dayberlin_weekdays     1895.1920   338.3471   5.601 2.14e-08 ***
-## city_dayberlin_weekends     1904.8977   338.2674   5.631 1.80e-08 ***
-## city_daybudapest_weekdays   3880.0408   704.0633   5.511 3.59e-08 ***
-## city_daybudapest_weekends   3906.3502   704.0708   5.548 2.91e-08 ***
-## city_daylisbon_weekdays    -2077.4612  1130.8273  -1.837 0.066201 .  
-## city_daylisbon_weekends    -2069.6484  1130.8363  -1.830 0.067229 .  
-## city_daylondon_weekdays    -1373.5039   204.1097  -6.729 1.73e-11 ***
-## city_daylondon_weekends    -1375.1043   204.1230  -6.737 1.65e-11 ***
-## city_dayparis_weekdays      -354.6025   276.2027  -1.284 0.199203    
-## city_dayparis_weekends      -371.8162   276.2127  -1.346 0.178271    
-## city_dayrome_weekdays       3026.1639   878.2040   3.446 0.000570 ***
-## city_dayrome_weekends       3031.0164   878.2293   3.451 0.000559 ***
-## city_dayvienna_weekdays     3219.2260   580.2311   5.548 2.91e-08 ***
-## city_dayvienna_weekends     3217.6304   580.3196   5.545 2.97e-08 ***
-## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
-## 
-## Residual standard error: 305.1 on 36162 degrees of freedom
-## Multiple R-squared:  0.215,  Adjusted R-squared:  0.2143 
-## F-statistic: 319.5 on 31 and 36162 DF,  p-value: < 2.2e-16
+## R-squared: 0.2149964
 \end{verbatim}
-
-The stepwise regression removed - host\_is\_superhost,
-rest\_index\_norm, dist
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\NormalTok{lm\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1\_step, }\AttributeTok{newdata =}\NormalTok{ my\_data\_test)}
-\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
-
-\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lm\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
-\NormalTok{RMSE}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## [1] 233.2787
+## Adjusted R-squared: 0.2146275
 \end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.9262
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1\_step, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3373441
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.336617
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.2787
+\end{verbatim}
+
+M1\_step Diagnostics
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{library}\NormalTok{(car)}
+\FunctionTok{autoplot}\NormalTok{(M1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-48-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{avPlots}\NormalTok{(M1)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-48-2.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-48-3.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-48-4.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-48-5.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_data\_train[}\DecValTok{34804}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          X  realSum       room_type person_capacity host_is_superhost multi biz
+## 49907 1736 637.6364 Entire home/apt               2             False     0   0
+##       cleanliness_rating guest_satisfaction_overall bedrooms      dist
+## 49907                 10                         93        1 0.9940386
+##       metro_dist attr_index_norm rest_index_norm      lng     lat
+## 49907  0.2025371        12.10842        6.748565 16.38568 48.2046
+##              city_day
+## 49907 vienna_weekdays
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_data\_train[}\DecValTok{3591}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##        X  realSum       room_type person_capacity host_is_superhost multi biz
+## 4917 183 156.3049 Entire home/apt               6             False     0   1
+##      cleanliness_rating guest_satisfaction_overall bedrooms     dist metro_dist
+## 4917                  9                         94        2 2.841432 0.04608507
+##      attr_index_norm rest_index_norm      lng      lat        city_day
+## 4917        2.366625         1.39056 23.72258 37.99906 athens_weekends
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{my\_data\_train[}\DecValTok{24349}\NormalTok{, ]}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##          X realSum    room_type person_capacity host_is_superhost multi biz
+## 21461 1904 108.818 Private room               2             False     0   1
+##       cleanliness_rating guest_satisfaction_overall bedrooms     dist
+## 21461                  8                         80        1 3.216239
+##       metro_dist attr_index_norm rest_index_norm      lng      lat
+## 21461  0.3290175        3.115481        14.47335 -9.14292 38.74124
+##              city_day
+## 21461 lisbon_weekends
+\end{verbatim}
+
+\hypertarget{mlr-with-ivs}{%
+\subsubsection{MLR with IVs}\label{mlr-with-ivs}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M1IV }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}
+\NormalTok{    biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
+\NormalTok{    lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ metro\_dist}\SpecialCharTok{:}\NormalTok{dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm}\SpecialCharTok{:}\NormalTok{dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm}\SpecialCharTok{:}\NormalTok{metro\_dist }\SpecialCharTok{+}
+\NormalTok{    rest\_index\_norm}\SpecialCharTok{:}\NormalTok{dist }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm}\SpecialCharTok{:}\NormalTok{metro\_dist }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm}\SpecialCharTok{:}\NormalTok{attr\_index\_norm,}
+    \AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1IV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2159815
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.215613
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.7348
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1IV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3379444
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.337218
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.173
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{M1stepIV }\OtherTok{=} \FunctionTok{step}\NormalTok{(M1IV, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1stepIV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2159435
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.215575
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.7422
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(M1stepIV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3380392
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3373129
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.1563
+\end{verbatim}
+
+\hypertarget{second-order-polynomial}{%
+\subsubsection{Second Order Polynomial}\label{second-order-polynomial}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly2 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}
+\NormalTok{    biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2154699
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2151012
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.8342
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3373538
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3366268
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.277
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly2step }\OtherTok{=} \FunctionTok{step}\NormalTok{(poly2, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2step, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2154289
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2150602
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.8422
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2step, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3373204
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3365933
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.2829
+\end{verbatim}
+
+\hypertarget{second-order-polynomial-with-ivs}{%
+\subsubsection{Second Order Polynomial with
+IVs}\label{second-order-polynomial-with-ivs}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly2IV }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}
+\NormalTok{    biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2IV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.22214
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2217744
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 303.5356
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2IV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.334993
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3342634
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.6922
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly2stepIV }\OtherTok{=} \FunctionTok{step}\NormalTok{(poly2IV, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2stepIV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2221344
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2217689
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 303.5367
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly2stepIV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3350694
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3343399
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.6788
+\end{verbatim}
+
+\hypertarget{third-order-polynomial}{%
+\subsubsection{Third Order Polynomial}\label{third-order-polynomial}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly3 }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}
+\NormalTok{    biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{3}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2160624
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.215694
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.7191
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3375855
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3368588
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.2362
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly3step }\OtherTok{=} \FunctionTok{step}\NormalTok{(poly3, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3step, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2160337
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2156653
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 304.7247
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3step, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3376519
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3369253
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 233.2245
+\end{verbatim}
+
+\hypertarget{third-order-polynomial-with-ivs}{%
+\subsubsection{Third Order Polynomial with
+IVs}\label{third-order-polynomial-with-ivs}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly3IV }\OtherTok{\textless{}{-}} \FunctionTok{lm}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}
+\NormalTok{    biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3IV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2330663
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2327059
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 301.3962
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3IV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.1901115
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.189223
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 257.8955
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{poly3stepIV }\OtherTok{=} \FunctionTok{step}\NormalTok{(poly3IV, }\AttributeTok{direction =} \StringTok{"backward"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3stepIV, my\_data\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2285384
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2281759
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 302.2846
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(poly3stepIV, my\_data\_test)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(my\_data\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{RMSE }\OtherTok{=} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.3281442
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.327407
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE:"}\NormalTok{, RMSE, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE: 234.8925
+\end{verbatim}
+
+\hypertarget{lasso-regression}{%
+\subsection{Lasso Regression}\label{lasso-regression}}
 
 \begin{Shaded}
 \begin{Highlighting}[]
 \CommentTok{\# Prepare the predictors and response variable}
 \NormalTok{x\_train }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
 \NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
-\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{*}\NormalTok{ metro\_dist }\SpecialCharTok{*}\NormalTok{ attr\_index\_norm }\SpecialCharTok{*}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
 \NormalTok{    lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
 \NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
 
 \CommentTok{\# Fit a Lasso regression model}
 \NormalTok{lasso\_model }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
@@ -1552,7 +3035,7 @@ rest\_index\_norm, dist
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-40-1.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-80-1.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1577,52 +3060,83 @@ rest\_index\_norm, dist
 
 
 \CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## R-squared: 0.214
+## R-squared: 0.2157005
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{cat}\NormalTok{(}\StringTok{"Multiple R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(multiple\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Multiple R-squared: 0.214
+## Adjusted R-squared: 0.2147241
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(adj\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on train set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Adjusted R-squared: 0.213
+## RMSE on train set: 325.8081
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Predict on the test data}
 \NormalTok{x\_test }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
 \NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
-\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}\NormalTok{ attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{*}\NormalTok{ metro\_dist }\SpecialCharTok{*}\NormalTok{ attr\_index\_norm }\SpecialCharTok{*}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}
 \NormalTok{    lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[, }\SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
-\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
-\NormalTok{lasso\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
 
-\CommentTok{\# Evaluate the model performance}
-\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lasso\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(rmse, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_test\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
+\NormalTok{y\_test\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_test)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_test)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## RMSE on test set: 233.534
+## R-squared: 0.3372477
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.3353195
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE on test set: 233.2957
 \end{verbatim}
 
 \begin{Shaded}
@@ -1630,10 +3144,11 @@ rest\_index\_norm, dist
 \CommentTok{\# Prepare the predictors and response variable}
 \NormalTok{x\_train }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
 \NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
-\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
-    \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[,}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[,}
     \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
 \NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
 
 \CommentTok{\# Fit a Lasso regression model}
 \NormalTok{lasso\_model }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
@@ -1646,7 +3161,7 @@ rest\_index\_norm, dist
 \end{Highlighting}
 \end{Shaded}
 
-\includegraphics{Project_files/figure-latex/unnamed-chunk-41-1.png}
+\includegraphics{Project_files/figure-latex/unnamed-chunk-81-1.png}
 
 \begin{Shaded}
 \begin{Highlighting}[]
@@ -1671,70 +3186,339 @@ rest\_index\_norm, dist
 
 
 \CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## R-squared: 0.214
+## R-squared: 0.2176971
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{cat}\NormalTok{(}\StringTok{"Multiple R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(multiple\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Multiple R-squared: 0.214
+## Adjusted R-squared: 0.2153122
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(adj\_R\_squared, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on train set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## Adjusted R-squared: 0.213
+## RMSE on train set: 324.7053
 \end{verbatim}
 
 \begin{Shaded}
 \begin{Highlighting}[]
-\CommentTok{\# Predict on the test data}
 \NormalTok{x\_test }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
 \NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
-\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
-    \DecValTok{2}\NormalTok{) }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[,}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{2}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{2}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[,}
     \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
-\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
-\NormalTok{lasso\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
 
-\CommentTok{\# Evaluate the model performance}
-\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ lasso\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_test\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
+\NormalTok{y\_test\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_test)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_test)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
 \CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
-\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, }\FunctionTok{round}\NormalTok{(rmse, }\DecValTok{3}\NormalTok{), }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
 \end{Highlighting}
 \end{Shaded}
 
 \begin{verbatim}
-## RMSE on test set: 235.35
+## R-squared: 0.2821967
 \end{verbatim}
 
-Even Lasso regression is not good because of extremely low value of
-R\^{}2 even in polynominal model of power 2 and 3.
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-\hypertarget{conclusion-at-this-point-in-time}{%
-\section{Conclusion at this Point in
-Time}\label{conclusion-at-this-point-in-time}}
+\begin{verbatim}
+## Adjusted R-squared: 0.2770702
+\end{verbatim}
 
-Even though EDA has given us good insights in price determinants, both
-Linear and Lasso Step Regression are not good for this case which is to
-be expected since all common data tends to be generally skewed Normal or
-Guassian(to be tested).
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
 
-Further modelling is required and will be conducted which includes
-trying of different linear techniques and also models from different
-family.
+\begin{verbatim}
+## RMSE on test set: 242.7917
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Prepare the predictors and response variable}
+\NormalTok{x\_train }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_train)[,}
+    \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+\NormalTok{y\_train }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum}
+\NormalTok{y\_test }\OtherTok{\textless{}{-}}\NormalTok{ my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum}
+
+\CommentTok{\# Fit a Lasso regression model}
+\NormalTok{lasso\_model }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{)}
+
+\CommentTok{\# Select the best lambda value using cross{-}validation}
+\NormalTok{cv\_model }\OtherTok{\textless{}{-}} \FunctionTok{cv.glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{nfolds =} \DecValTok{5}\NormalTok{)}
+
+\CommentTok{\# Plot the cross{-}validation results}
+\FunctionTok{plot}\NormalTok{(cv\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-82-1.png}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Select the lambda value that minimizes the mean}
+\CommentTok{\# cross{-}validation error}
+\NormalTok{best\_lambda }\OtherTok{\textless{}{-}}\NormalTok{ cv\_model}\SpecialCharTok{$}\NormalTok{lambda.min}
+
+\CommentTok{\# Fit a Lasso regression model with the selected lambda}
+\CommentTok{\# value}
+\NormalTok{lasso\_model\_best }\OtherTok{\textless{}{-}} \FunctionTok{glmnet}\NormalTok{(x\_train, y\_train, }\AttributeTok{alpha =} \DecValTok{1}\NormalTok{, }\AttributeTok{lambda =}\NormalTok{ best\_lambda)}
+
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_train\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_train)}
+\NormalTok{y\_train\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_train)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_train }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{multiple\_R\_squared }\OtherTok{\textless{}{-}} \FunctionTok{cor}\NormalTok{(y\_train\_pred, y\_train)}\SpecialCharTok{\^{}}\DecValTok{2}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_train)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_train)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2188426
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2126426
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_train\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on train set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE on train set: 324.4427
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{x\_test }\OtherTok{\textless{}{-}} \FunctionTok{model.matrix}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}
+\NormalTok{    host\_is\_superhost }\SpecialCharTok{+}\NormalTok{ multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}\NormalTok{ guest\_satisfaction\_overall }\SpecialCharTok{+}
+\NormalTok{    bedrooms }\SpecialCharTok{+} \FunctionTok{poly}\NormalTok{(dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(metro\_dist, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(attr\_index\_norm,}
+    \DecValTok{3}\NormalTok{) }\SpecialCharTok{*} \FunctionTok{poly}\NormalTok{(rest\_index\_norm, }\DecValTok{3}\NormalTok{) }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat }\SpecialCharTok{+}\NormalTok{ city\_day, }\AttributeTok{data =}\NormalTok{ my\_data\_test)[,}
+    \SpecialCharTok{{-}}\DecValTok{1}\NormalTok{]}
+
+\CommentTok{\# Calculate R{-}squared and multiple R{-}squared}
+\NormalTok{y\_test\_pred }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(lasso\_model\_best, }\AttributeTok{newx =}\NormalTok{ x\_test)}
+\NormalTok{y\_test\_mean }\OtherTok{\textless{}{-}} \FunctionTok{mean}\NormalTok{(y\_test)}
+\NormalTok{SST }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_mean)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{SSR }\OtherTok{\textless{}{-}} \FunctionTok{sum}\NormalTok{((y\_test }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}
+\NormalTok{R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ SSR}\SpecialCharTok{/}\NormalTok{SST}
+\NormalTok{n }\OtherTok{\textless{}{-}} \FunctionTok{length}\NormalTok{(y\_test)}
+\NormalTok{p }\OtherTok{\textless{}{-}} \FunctionTok{ncol}\NormalTok{(x\_test)}
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (SSR}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}\SpecialCharTok{/}\NormalTok{(SST}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+
+
+\CommentTok{\# Print the R{-}squared and multiple R{-}squared values}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"R{-}squared:"}\NormalTok{, R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## R-squared: 0.2587531
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{cat}\NormalTok{(}\StringTok{"Adjusted R{-}squared:"}\NormalTok{, adj\_R\_squared, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## Adjusted R-squared: 0.2448794
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# Evaluate the model performance}
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ y\_test\_pred)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\FunctionTok{cat}\NormalTok{(}\StringTok{"RMSE on test set:"}\NormalTok{, rmse, }\StringTok{"}\SpecialCharTok{\textbackslash{}n}\StringTok{"}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## RMSE on test set: 246.7246
+\end{verbatim}
+
+Even step regression is not good because of extremely low value of
+R\^{}2 even in polynomial model of power 2 and 3.
+
+\hypertarget{random-forest-regression-1}{%
+\subsection{Random Forest Regression}\label{random-forest-regression-1}}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rf\_model }\OtherTok{\textless{}{-}} \FunctionTok{randomForest}\NormalTok{(realSum }\SpecialCharTok{\textasciitilde{}}\NormalTok{ room\_type }\SpecialCharTok{+}\NormalTok{ host\_is\_superhost }\SpecialCharTok{+}
+\NormalTok{    multi }\SpecialCharTok{+}\NormalTok{ biz }\SpecialCharTok{+}\NormalTok{ city\_day }\SpecialCharTok{+}\NormalTok{ person\_capacity }\SpecialCharTok{+}\NormalTok{ cleanliness\_rating }\SpecialCharTok{+}
+\NormalTok{    guest\_satisfaction\_overall }\SpecialCharTok{+}\NormalTok{ bedrooms }\SpecialCharTok{+}\NormalTok{ dist }\SpecialCharTok{+}\NormalTok{ metro\_dist }\SpecialCharTok{+}
+\NormalTok{    attr\_index\_norm }\SpecialCharTok{+}\NormalTok{ rest\_index\_norm }\SpecialCharTok{+}\NormalTok{ lng }\SpecialCharTok{+}\NormalTok{ lat, }\AttributeTok{data =}\NormalTok{ my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{predictions }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, my\_data\_train)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ predictions)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{rmse}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 120.6731
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (}\FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ predictions)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{((my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}
+    \FunctionTok{mean}\NormalTok{(my\_data\_train}\SpecialCharTok{$}\NormalTok{realSum))}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{r\_squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.8770571
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ ((}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ r\_squared) }\SpecialCharTok{*}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{adj\_R\_squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.874756
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{predictions }\OtherTok{\textless{}{-}} \FunctionTok{predict}\NormalTok{(rf\_model, my\_data\_test)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{rmse }\OtherTok{\textless{}{-}} \FunctionTok{sqrt}\NormalTok{(}\FunctionTok{mean}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ predictions)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{rmse}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 140.1627
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{r\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ (}\FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}\NormalTok{ predictions)}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{)}\SpecialCharTok{/}\FunctionTok{sum}\NormalTok{((my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum }\SpecialCharTok{{-}}
+    \FunctionTok{mean}\NormalTok{(my\_data\_test}\SpecialCharTok{$}\NormalTok{realSum))}\SpecialCharTok{\^{}}\DecValTok{2}\NormalTok{))}
+\NormalTok{r\_squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7607771
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{adj\_R\_squared }\OtherTok{\textless{}{-}} \DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ ((}\DecValTok{1} \SpecialCharTok{{-}}\NormalTok{ r\_squared) }\SpecialCharTok{*}\NormalTok{ (n }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{)}\SpecialCharTok{/}\NormalTok{(n }\SpecialCharTok{{-}}\NormalTok{ p }\SpecialCharTok{{-}} \DecValTok{1}\NormalTok{))}
+\NormalTok{adj\_R\_squared}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+## [1] 0.7562996
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{importance}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##                            IncNodePurity
+## room_type                      128820124
+## host_is_superhost               29206740
+## multi                           23032640
+## biz                             28483381
+## city_day                       119817452
+## person_capacity                181945316
+## cleanliness_rating              84896646
+## guest_satisfaction_overall     153697848
+## bedrooms                       339811264
+## dist                           403842463
+## metro_dist                     260251950
+## attr_index_norm                668769759
+## rest_index_norm                397578038
+## lng                            489702071
+## lat                            605397008
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\FunctionTok{varImpPlot}\NormalTok{(rf\_model)}
+\end{Highlighting}
+\end{Shaded}
+
+\includegraphics{Project_files/figure-latex/unnamed-chunk-88-1.png}
 
 \end{document}
